@@ -8,6 +8,8 @@ use stdClass;
 
 class DataLayer
 {
+    use CrudTrait;
+
     private $entity;
     private $primary;
     private $required;
@@ -21,7 +23,6 @@ class DataLayer
 
     protected $fail;
     protected $data;
-
 
     public function __construct(string $entity, array $requiredFileds, string $primaryKey = 'id')
     {
@@ -121,5 +122,55 @@ class DataLayer
         $stmt = Connect::getInstance()->prepare($this->statement);
         $stmt->execute($this->params);
         return $stmt->rowCount();
+    }
+
+    public function save(): bool
+    {
+        $id = null;
+        $primary = $this->primary;
+
+        try {
+            if (!$this->required()) {
+                throw new PDOException("Preencha os campos necessários");
+            }
+
+            /** Update */
+            if (!empty($this->id)) {
+                $id = $this->data->$primary;
+                $this->update($this->safe(), $this->primary . " = :id", "id={$id}");
+            }
+
+            /** Create */
+            if (empty($this->id)) {
+                $id = $this->create($this->safe());
+            }
+
+            $this->data = $this->findById($id)->data();
+            return true;
+        } catch (PDOException $exception) {
+            $this->fail = $exception;
+            return false;
+        }
+    }
+
+    protected function required(): bool
+    {
+        $data = (array)$this->data();
+        foreach ($this->required as $field) {
+            if (empty($data[$field])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected function safe(): ?array
+    {
+        $safe = (array)$this->data;
+        foreach ([$this->primary, "updated_at", "created_at"] as $unset) {
+            unset($safe[$unset]);
+        }
+
+        return $safe;
     }
 }
