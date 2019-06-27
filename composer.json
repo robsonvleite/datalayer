@@ -1,0 +1,32 @@
+{
+  "name": "coffeecode/datalayer",
+  "description": "The data layer is a persistent abstraction component of your database that PDO",
+  "keywords": [
+    "CoffeeCode",
+    "UpInside",
+    "Database",
+    "PDO",
+    "Save",
+    "Delete",
+    "Destroy",
+    "CRUD"
+  ],
+  "homepage": "http://www.upinside.com.br",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Robson V. Leite",
+      "email": "cursos@upinside.com.br",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.2",
+    "ext-pdo": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "CoffeeCode\\DataLayer\\": "src"
+    }
+  }
+}
