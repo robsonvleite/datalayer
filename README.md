@@ -51,63 +51,95 @@ Para mais detalhes sobre como usar o Data Layer, veja a pasta de exemplo com det
 
 ```php
 <?php
+use Example\Models\User;
+$model = new User();
 
+//find all users
+$users = $model->find()->fetch(true);
+
+//find all users limit 2
+$users = $model->find()->limit(2)->fetch(true);
+
+//find all users limit 2 offset 2
+$users = $model->find()->limit(2)->offset(2)->fetch(true);
+
+//find all users limit 2 offset 2 order by filed ASC
+$users = $model->find()->limit(2)->offset(2)->order("first_name ASC")->fetch(true);
+
+//looping users
+foreach ($users as $user) {
+    echo $user->first_name;
+}
+
+//find one user by condition
+$user = $model->find("first_name = :name", "name=Robson")->fetch();
+echo $user->first_name;
 ```
 
-###### fetch
+#### findById
 
 ```php
 <?php
+use Example\Models\User;
 
+$model = new User();
+$user = $model->findById(2);
+echo $user->first_name;
 ```
 
-###### order
+#### count
 
 ```php
 <?php
+use Example\Models\User;
+$model = new User();
 
+$count = $model->find()->count();
 ```
 
-###### limit
+#### save create
 
 ```php
 <?php
+use Example\Models\User;
+$user = new User();
 
+$user->first_name = "Robson";
+$user->last_name = "Leite";
+$userId = $user->save();
 ```
 
-###### offset
+#### save update
 
 ```php
 <?php
+use Example\Models\User;
+$user = (new User())->findById(2);
 
-```
-
-###### count
-
-```php
-<?php
-
-```
-
-###### filter
-
-```php
-<?php
-
-```
-
-#### save
-
-```php
-<?php
-
+$user->first_name = "Robson";
+$userId = $user->save();
 ```
 
 #### destroy
 
 ```php
 <?php
+use Example\Models\User;
+$user = (new User())->findById(2);
 
+$user->destroy();
+```
+
+#### fail
+
+```php
+<?php
+use Example\Models\User;
+$user = (new User())->findById(2);
+
+if($user->fail()){
+    echo $user->fail()->getMessage();
+}
 ```
 
 ## Contributing
