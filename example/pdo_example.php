@@ -1,21 +1,20 @@
 <?php
 
-define("CONF_DB_HOST", "localhost");
-define("CONF_DB_NAME", "datalayer_example");
-define("CONF_DB_USER", "root");
-define("CONF_DB_PASS", "");
-
+require 'db_config.php';
 require '../vendor/autoload.php';
 
 use CoffeeCode\DataLayer\Connect;
 
+//GET PDO instance AND errors
 $connect = Connect::getInstance();
 $error = Connect::getError();
 
+//CHECK connection/errors
 if ($error) {
     echo $error->getMessage();
     exit;
 }
 
+//FETCH DATA
 $users = $connect->query("SELECT * FROM users LIMIT 5");
 var_dump($users->fetchAll());

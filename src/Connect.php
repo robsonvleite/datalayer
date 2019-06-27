@@ -2,8 +2,8 @@
 
 namespace CoffeeCode\DataLayer;
 
-use PDO as PDO;
-use PDOException as PDOException;
+use PDO;
+use PDOException;
 
 class Connect
 {
