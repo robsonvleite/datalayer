@@ -5,6 +5,10 @@ namespace CoffeeCode\DataLayer;
 use PDO;
 use PDOException;
 
+/**
+ * Class Connect
+ * @package CoffeeCode\DataLayer
+ */
 class Connect
 {
     /** @const array */
@@ -43,6 +47,9 @@ class Connect
     }
 
 
+    /**
+     * @return PDOException|null
+     */
     public static function getError(): ?PDOException
     {
         return self::$error;

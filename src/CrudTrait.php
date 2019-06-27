@@ -2,8 +2,16 @@
 
 namespace CoffeeCode\DataLayer;
 
+/**
+ * Trait CrudTrait
+ * @package CoffeeCode\DataLayer
+ */
 trait CrudTrait
 {
+    /**
+     * @param array $data
+     * @return int|null
+     */
     protected function create(array $data): ?int
     {
         try {
@@ -20,6 +28,12 @@ trait CrudTrait
         }
     }
 
+    /**
+     * @param array $data
+     * @param string $terms
+     * @param string $params
+     * @return int|null
+     */
     protected function update(array $data, string $terms, string $params): ?int
     {
         try {
@@ -39,6 +53,11 @@ trait CrudTrait
         }
     }
 
+    /**
+     * @param string $terms
+     * @param string|null $params
+     * @return bool
+     */
     public function delete(string $terms, ?string $params): bool
     {
         try {
@@ -57,6 +76,10 @@ trait CrudTrait
         }
     }
 
+    /**
+     * @param array $data
+     * @return array|null
+     */
     private function filter(array $data): ?array
     {
         $filter = [];
