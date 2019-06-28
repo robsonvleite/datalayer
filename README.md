@@ -47,6 +47,38 @@ composer require coffeecode/datalayer
 
 Para mais detalhes sobre como usar o Data Layer, veja a pasta de exemplo com detalhes no diretório do componente
 
+#### connection
+
+######To begin using the Data Layer, you need to connect to the database (MariaDB / MySql).
+
+Para começar a usar o Data Layer precisamos de uma conexão com o seu banco de dados (MariaDB/MySql).
+
+```php
+define("CONF_DB_HOST", "localhost");
+define("CONF_DB_NAME", "datalayer_example");
+define("CONF_DB_USER", "root");
+define("CONF_DB_PASS", "");
+```
+
+#### your model
+
+######The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer. See example
+
+O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para consumir é necessário criar o modelo de sua tabela e herdar o Data Layer. Veja o exemplo
+
+```php
+class User extends DataLayer
+{
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct("users", ["first_name", "last_name"]);
+    }
+}
+```
+
 #### find
 
 ```php
