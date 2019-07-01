@@ -17,4 +17,14 @@ class Address extends DataLayer
     {
         parent::__construct("address", [], 'address_id');
     }
+
+    /**
+     * @param int    $user_id
+     * @param string $columns
+     * @return Address|null
+     */
+    public function findByUser(int $user_id, string $columns = '*'): ?Address
+    {
+        return $this->find("user_id = :id", "id={$user_id}", $columns)->fetch();
+    }
 }

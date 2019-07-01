@@ -44,6 +44,9 @@ class DataLayer
     /** @var object|null */
     protected $data;
 
+    /** @var array $relational_fields no update or create */
+    protected $relational_fields = [];
+
     /**
      * DataLayer constructor.
      * @param string $entity
@@ -266,7 +269,7 @@ class DataLayer
     protected function safe(): ?array
     {
         $safe = (array)$this->data;
-        foreach ([$this->primary, "updated_at", "created_at"] as $unset) {
+        foreach (array_merge([$this->primary, "updated_at", "created_at"], $this->relational_fields) as $unset) {
             unset($safe[$unset]);
         }
 
