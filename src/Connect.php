@@ -11,14 +11,6 @@ use PDOException;
  */
 class Connect
 {
-    /** @const array */
-    private const OPTIONS = [
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-        PDO::ATTR_CASE => PDO::CASE_NATURAL
-    ];
-
     /** @var PDO */
     private static $instance;
 
@@ -33,10 +25,10 @@ class Connect
         if (empty(self::$instance)) {
             try {
                 self::$instance = new PDO(
-                    "mysql:host=" . CONF_DB_HOST . ";dbname=" . CONF_DB_NAME,
-                    CONF_DB_USER,
-                    CONF_DB_PASS,
-                    self::OPTIONS
+                    DATA_LAYER_CONFIG["driver"] . ":host=" . DATA_LAYER_CONFIG["host"] . ";dbname=" . DATA_LAYER_CONFIG["dbname"] . ";port=" . DATA_LAYER_CONFIG["port"],
+                    DATA_LAYER_CONFIG["username"],
+                    DATA_LAYER_CONFIG["passwd"],
+                    DATA_LAYER_CONFIG["options"]
                 );
             } catch (PDOException $exception) {
                 self::$error = $exception;

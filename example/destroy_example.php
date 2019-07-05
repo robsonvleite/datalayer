@@ -11,7 +11,7 @@ use Example\Models\User;
 
 print "user remove";
 
-$users = (new User())->find("id > :id", "id=5")->fetch(true);
+$users = (new User())->find("id > :id", "id=1")->fetch(true);
 
 if ($users) {
     foreach ($users as $user) {
@@ -21,7 +21,7 @@ if ($users) {
 
 print "<hr>addr remove";
 
-$addrs = (new Address())->find("address_id > :id", "id=5")->fetch(true);
+$addrs = (new Address())->find("address_id > :id", "id=1")->fetch(true);
 
 if ($addrs) {
     foreach ($addrs as $addr) {

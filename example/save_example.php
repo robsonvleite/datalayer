@@ -20,17 +20,19 @@ $user->save();
 
 var_dump($user);
 
-
 print "update user";
 
 $name = ["Robson", "Kaue", "Gustavo", "João"];
 
-$user = (new User())->findById(100);
-$user->first_name = $name[rand(0, 3)];
-$user->save();
+$user = (new User())->findById(10000);
 
-var_dump($user);
-
+if ($user) {
+    $user->first_name = $name[rand(0, 3)];
+    $user->save();
+    var_dump($user);
+}else{
+    echo "<h2>Not User</h2>";
+}
 
 print "addr model (primary changed)";
 

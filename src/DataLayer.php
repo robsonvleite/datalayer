@@ -10,7 +10,7 @@ use stdClass;
  * Class DataLayer
  * @package CoffeeCode\DataLayer
  */
-class DataLayer
+abstract class DataLayer
 {
     use CrudTrait;
 
