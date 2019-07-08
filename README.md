@@ -72,9 +72,9 @@ define("DATA_LAYER_CONFIG", [
 
 #### your model
 
-######The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer. See example
+######The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer.
 
-O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para consumir é necessário criar o modelo de sua tabela e herdar o Data Layer. Veja o exemplo
+O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para consumir é necessário criar o modelo de sua tabela e herdar o Data Layer.
 
 ```php
 class User extends DataLayer
@@ -84,6 +84,7 @@ class User extends DataLayer
      */
     public function __construct()
     {
+        //string "TABLE_NAME", array ["REQUIRED_FIELD_1", "REQUIRED_FIELD_2"], string "PRIMARY_KEY", bool "TIMESTAMPS"
         parent::__construct("users", ["first_name", "last_name"]);
     }
 }
