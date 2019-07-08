@@ -9,7 +9,9 @@ require 'Models/Address.php';
 use Example\Models\Address;
 use Example\Models\User;
 
-
+/*
+ * USER MODEL
+ */
 print "new user model";
 
 $user = new User;
@@ -20,6 +22,9 @@ $user->save();
 
 var_dump($user);
 
+/*
+ * UPDATE USER
+ */
 print "update user";
 
 $name = ["Robson", "Kaue", "Gustavo", "João"];
@@ -30,14 +35,23 @@ if ($user) {
     $user->first_name = $name[rand(0, 3)];
     $user->save();
     var_dump($user);
-}else{
+} else {
     echo "<h2>Not User</h2>";
 }
 
-print "addr model (primary changed)";
+/*
+ * ADDR MODEL PRIMARY KEY CHANGED
+ */
+print "addr model";
 
 $addr = new Address;
 $addr->address = "Rua Nome Da Rua 001";
-$addr->save();
+$address = $addr->save();
+
+if (!$address) {
+    echo "<h2>{$addr->fail()->getMessage()}</h2>";
+    var_dump($addr->fail());
+    die;
+}
 
 var_dump($addr);

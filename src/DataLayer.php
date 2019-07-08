@@ -2,6 +2,7 @@
 
 namespace CoffeeCode\DataLayer;
 
+use Exception;
 use PDO;
 use PDOException;
 use stdClass;
@@ -22,6 +23,9 @@ abstract class DataLayer
 
     /** @var array $required table required fields */
     private $required;
+
+    /** @var string $timestamps control created and updated at */
+    private $timestamps;
 
     /** @var string */
     protected $statement;
@@ -47,14 +51,16 @@ abstract class DataLayer
     /**
      * DataLayer constructor.
      * @param string $entity
-     * @param array $requiredFileds
-     * @param string $primaryKey
+     * @param array $required
+     * @param string $primary
+     * @param bool $timestamps
      */
-    public function __construct(string $entity, array $requiredFileds, string $primaryKey = 'id')
+    public function __construct(string $entity, array $required, string $primary = 'id', bool $timestamps = true)
     {
         $this->entity = $entity;
-        $this->primary = $primaryKey;
-        $this->required = $requiredFileds;
+        $this->primary = $primary;
+        $this->required = $required;
+        $this->timestamps = $timestamps;
     }
 
     /**
@@ -208,7 +214,7 @@ abstract class DataLayer
 
         try {
             if (!$this->required()) {
-                throw new PDOException("Preencha os campos necessários");
+                throw new Exception("Preencha os campos necessários");
             }
 
             /** Update */
@@ -222,9 +228,13 @@ abstract class DataLayer
                 $id = $this->create($this->safe());
             }
 
+            if (!$id) {
+                return false;
+            }
+
             $this->data = $this->findById($id)->data();
             return true;
-        } catch (PDOException $exception) {
+        } catch (Exception $exception) {
             $this->fail = $exception;
             return false;
         }
@@ -266,9 +276,7 @@ abstract class DataLayer
     protected function safe(): ?array
     {
         $safe = (array)$this->data;
-        foreach ([$this->primary, "updated_at", "created_at"] as $unset) {
-            unset($safe[$unset]);
-        }
+        unset($safe[$this->primary]);
 
         return $safe;
     }

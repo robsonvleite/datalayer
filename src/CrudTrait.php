@@ -2,6 +2,10 @@
 
 namespace CoffeeCode\DataLayer;
 
+use DateTime;
+use Exception;
+use PDOException;
+
 /**
  * Trait CrudTrait
  * @package CoffeeCode\DataLayer
@@ -11,9 +15,15 @@ trait CrudTrait
     /**
      * @param array $data
      * @return int|null
+     * @throws Exception
      */
     protected function create(array $data): ?int
     {
+        if ($this->timestamps) {
+            $data["created_at"] = (new DateTime("now"))->format("Y-m-d H:i:s");
+            $data["updated_at"] = $data["created_at"];
+        }
+
         try {
             $columns = implode(", ", array_keys($data));
             $values = ":" . implode(", :", array_keys($data));
@@ -22,7 +32,7 @@ trait CrudTrait
             $stmt->execute($this->filter($data));
 
             return Connect::getInstance()->lastInsertId();
-        } catch (\PDOException $exception) {
+        } catch (PDOException $exception) {
             $this->fail = $exception;
             return null;
         }
@@ -33,9 +43,14 @@ trait CrudTrait
      * @param string $terms
      * @param string $params
      * @return int|null
+     * @throws Exception
      */
     protected function update(array $data, string $terms, string $params): ?int
     {
+        if ($this->timestamps) {
+            $data["updated_at"] = (new DateTime("now"))->format("Y-m-d H:i:s");
+        }
+
         try {
             $dateSet = [];
             foreach ($data as $bind => $value) {
@@ -47,7 +62,7 @@ trait CrudTrait
             $stmt = Connect::getInstance()->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");
             $stmt->execute($this->filter(array_merge($data, $params)));
             return ($stmt->rowCount() ?? 1);
-        } catch (\PDOException $exception) {
+        } catch (PDOException $exception) {
             $this->fail = $exception;
             return null;
         }
@@ -70,7 +85,7 @@ trait CrudTrait
 
             $stmt->execute();
             return true;
-        } catch (\PDOException $exception) {
+        } catch (PDOException $exception) {
             $this->fail = $exception;
             return false;
         }
