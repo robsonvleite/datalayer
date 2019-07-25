@@ -1,6 +1,3 @@
-
-# Data Layer @CoffeeCode
-
 [![Maintainer](http://img.shields.io/badge/maintainer-@robsonvleite-blue.svg?style=flat-square)](https://twitter.com/robsonvleite)
 [![Source Code](http://img.shields.io/badge/source-coffeecode/datalayer-blue.svg?style=flat-square)](https://github.com/robsonvleite/datalayer)
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/coffeecode/datalayer.svg?style=flat-square)](https://packagist.org/packages/coffeecode/datalayer)
