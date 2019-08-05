@@ -106,7 +106,7 @@ $users = $model->find()->limit(2)->fetch(true);
 //find all users limit 2 offset 2
 $users = $model->find()->limit(2)->offset(2)->fetch(true);
 
-//find all users limit 2 offset 2 order by filed ASC
+//find all users limit 2 offset 2 order by field ASC
 $users = $model->find()->limit(2)->offset(2)->order("first_name ASC")->fetch(true);
 
 //looping users
