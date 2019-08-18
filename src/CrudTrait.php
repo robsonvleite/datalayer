@@ -23,7 +23,6 @@ trait CrudTrait
             $data["created_at"] = (new DateTime("now"))->format("Y-m-d H:i:s");
             $data["updated_at"] = $data["created_at"];
         }
-        $data = filter_var_array($data, FILTER_SANITIZE_SPECIAL_CHARS);
 
         try {
             $columns = implode(", ", array_keys($data));
@@ -51,7 +50,6 @@ trait CrudTrait
         if ($this->timestamps) {
             $data["updated_at"] = (new DateTime("now"))->format("Y-m-d H:i:s");
         }
-        $data = filter_var_array($data, FILTER_SANITIZE_SPECIAL_CHARS);
 
         try {
             $dateSet = [];
