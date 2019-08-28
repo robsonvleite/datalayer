@@ -16,16 +16,16 @@ abstract class DataLayer
     use CrudTrait;
 
     /** @var string $entity database table */
-    private $entity;
+    protected $entity;
 
     /** @var string $primary table primary key field */
-    private $primary;
+    protected $primary;
 
     /** @var array $required table required fields */
-    private $required;
+    protected $required;
 
     /** @var string $timestamps control created and updated at */
-    private $timestamps;
+    protected $timestamps;
 
     /** @var string */
     protected $statement;
