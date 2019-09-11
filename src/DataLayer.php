@@ -16,16 +16,16 @@ abstract class DataLayer
     use CrudTrait;
 
     /** @var string $entity database table */
-    private $entity;
+    protected $entity;
 
     /** @var string $primary table primary key field */
-    private $primary;
+    protected $primary;
 
     /** @var array $required table required fields */
-    private $required;
+    protected $required;
 
     /** @var string $timestamps control created and updated at */
-    private $timestamps;
+    protected $timestamps;
 
     /** @var string */
     protected $statement;
@@ -48,19 +48,27 @@ abstract class DataLayer
     /** @var object|null */
     protected $data;
 
+//    /**
+//     * DataLayer constructor.
+//     * @param string $entity
+//     * @param array $required
+//     * @param string $primary
+//     * @param bool $timestamps
+//     */
+//    public function __construct(string $entity, array $required, string $primary = 'id', bool $timestamps = true)
+//    {
+//        $this->entity = $entity;
+//        $this->primary = $primary;
+//        $this->required = $required;
+//        $this->timestamps = $timestamps;
+//    }
+
     /**
      * DataLayer constructor.
-     * @param string $entity
-     * @param array $required
-     * @param string $primary
-     * @param bool $timestamps
      */
-    public function __construct(string $entity, array $required, string $primary = 'id', bool $timestamps = true)
+    public function __construct()
     {
-        $this->entity = $entity;
-        $this->primary = $primary;
-        $this->required = $required;
-        $this->timestamps = $timestamps;
+        $this->resolve();
     }
 
     /**
@@ -268,6 +276,75 @@ abstract class DataLayer
             }
         }
         return true;
+    }
+
+    /**
+     * General resolve worker.
+     * @return void
+     */
+    protected function resolve(): void
+    {
+        $this->resolveEntity();
+        $this->resolveRequired();
+        $this->resolveTimestamps();
+        $this->resolvePK();
+    }
+
+    /**
+     * Checking for default 'entity(table name)' property.
+     * @return void
+     */
+    protected function resolveEntity(): void
+    {
+        // Entity name which comes from model as property,
+        // could not be converted to lower case because
+        // user registered it manually.
+        if (empty($this->entity)) {
+            // Getting called class name which is always Model.
+            $segments = explode("\\", get_called_class());
+            $len = count($segments);
+            if ($len > 0) {
+                // model(entity) name is default lower case.
+                $name = strtolower($segments[$len - 1]);
+
+                $this->entity = $name;
+            }
+        }
+    }
+
+    /**
+     * Checking for default 'required' property.
+     * @return void
+     */
+    protected function resolveRequired(): void
+    {
+        // Type of string is not handled for now.
+        // But it can be done soon.
+        if (empty($this->required)) {
+            $this->required = [];
+        }
+    }
+
+    /**
+     * Checking for default 'primary' property.
+     * @return void
+     */
+    protected function resolvePK(): void
+    {
+        if (empty($this->primary)) {
+            $this->primary = "id";
+        }
+    }
+
+    /**
+     * Checking for default 'timestamps' property.
+     * @return void
+     */
+    protected function resolveTimestamps(): void
+    {
+        if (empty($this->timestamps)) {
+            $this->timestamps = true;
+        }
     }
 
     /**
