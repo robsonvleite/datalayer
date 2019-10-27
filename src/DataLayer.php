@@ -33,13 +33,16 @@ abstract class DataLayer
     /** @var string */
     protected $params;
 
-    /** @var int */
+    /** @var string */
+    protected $group;
+
+    /** @var string */
     protected $order;
 
     /** @var int */
     protected $limit;
 
-    /** @var string */
+    /** @var int */
     protected $offset;
 
     /** @var \PDOException|null */
@@ -140,6 +143,16 @@ abstract class DataLayer
     }
 
     /**
+     * @param string $columnGroup
+     * @return DataLayer|null
+     */
+    public function group(string $columnGroup): ?DataLayer
+    {
+        $this->order = " GROUP BY {$columnGroup}";
+        return $this;
+    }
+
+    /**
      * @param string $columnOrder
      * @return DataLayer|null
      */
@@ -176,7 +189,7 @@ abstract class DataLayer
     public function fetch(bool $all = false)
     {
         try {
-            $stmt = Connect::getInstance()->prepare($this->statement . $this->order . $this->limit . $this->offset);
+            $stmt = Connect::getInstance()->prepare($this->statement . $this->group . $this->order . $this->limit . $this->offset);
             $stmt->execute($this->params);
 
             if (!$stmt->rowCount()) {
