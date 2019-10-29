@@ -103,9 +103,9 @@ abstract class DataLayer
     }
 
     /**
-     * @return PDOException|null
+     * @return PDOException|Exception|null
      */
-    public function fail(): ?PDOException
+    public function fail()
     {
         return $this->fail;
     }
