@@ -4,7 +4,7 @@ define("DATA_LAYER_CONFIG", [
     "driver" => "mysql",
     "host" => "localhost",
     "port" => "3306",
-    "dbname" => "datalayer",
+    "dbname" => "phptips",
     "username" => "root",
     "passwd" => "",
     "options" => [

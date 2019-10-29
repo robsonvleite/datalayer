@@ -23,6 +23,7 @@ var_dump($user);
  */
 print "find";
 $users = $model->find()->fetch(true);
+//$users = $model->find()->group("genre")->fetch(true);
 //$users = $model->find()->limit(2)->fetch(true);
 //$users = $model->find()->limit(2)->offset(2)->fetch(true);
 //$users = $model->find()->limit(2)->offset(2)->order("first_name ASC")->fetch(true);
@@ -32,7 +33,7 @@ var_dump($totalUsers);
 
 if ($users) {
     foreach ($users as $user) {
-        var_dump($user);
+        var_dump($user->data());
     }
 } else {
     echo "<h2>Not Users</h2>";
