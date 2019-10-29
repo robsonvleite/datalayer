@@ -143,12 +143,12 @@ abstract class DataLayer
     }
 
     /**
-     * @param string $columnGroup
+     * @param string $column
      * @return DataLayer|null
      */
-    public function group(string $columnGroup): ?DataLayer
+    public function group(string $column): ?DataLayer
     {
-        $this->order = " GROUP BY {$columnGroup}";
+        $this->group = " GROUP BY {$column}";
         return $this;
     }
 
