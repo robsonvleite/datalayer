@@ -32,7 +32,7 @@ CoffeeCode é um conjunto de pequenos e otimizados componentes PHP para tarefas 
 Data Layer is available via Composer:
 
 ```bash
-"coffeecode/datalayer": "^1.0"
+"coffeecode/datalayer": "^1.4"
 ```
 
 or run
