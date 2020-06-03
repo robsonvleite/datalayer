@@ -119,6 +119,34 @@ $user = $model->find("first_name = :name", "name=Robson")->fetch();
 echo $user->first_name;
 ```
 
+#### New alternative to the find method and condition, using get method
+```php
+<?php
+use Example\Models\User;
+
+// get one with where - alternative find one
+$model = new User();
+$user = $model->where("name", "=", "Fulano")->get();
+
+if ($user) {
+    var_dump($user->data());
+} else {
+    echo "<h2>Not User</h2>";
+}
+
+// get all with get - alternative find all
+$model = new User();
+$users = $model->get(true);
+
+if ($users) {
+    foreach ($users as $user) {
+        var_dump($user->data());
+    }
+} else {
+    echo "<h2>Not Users</h2>";
+}
+```
+
 #### findById
 
 ```php
@@ -138,6 +166,109 @@ use Example\Models\User;
 $model = new User();
 
 $count = $model->find()->count();
+```
+
+#### wheres
+```php
+<?php
+use Example\Models\User;
+$model = new User();
+
+// find with where
+$users = $model
+    ->where("id", ">", 1)
+    ->where("name", "=", "teste")
+    ->find()
+    ->fetch(true);
+
+if ($users) {
+    foreach ($users as $user) {
+        var_dump($user->data());
+    }
+} else {
+    echo "<h2>Not Users</h2>";
+}
+
+$model = new User();
+// find with whereRaw
+$users = $model
+    ->whereRaw("name LIKE '%fulano%' ")
+    ->find()
+    ->fetch(true);
+
+if ($users) {
+    foreach ($users as $user) {
+        var_dump($user->data());
+    }
+} else {
+    echo "<h2>Not Users</h2>";
+}
+
+$model = new User();
+// find with whereIn
+$users = $model
+    ->whereIn("id", [53,55])
+    ->find()
+    ->fetch(true);
+
+if ($users) {
+    foreach ($users as $user) {
+        var_dump($user->data());
+    }
+} else {
+    echo "<h2>Not Users</h2>";
+}
+```
+
+#### joins
+```php
+<?php
+use Example\Models\User;
+
+$model = new User();
+// find with join address
+$users = $model
+    ->join("address", "user_id", "id")
+    ->find()
+    ->fetch(true);
+
+if ($users) {
+    foreach ($users as $user) {
+        var_dump($user->data());
+    }
+} else {
+    echo "<h2>Not Users</h2>";
+}
+
+$model = new User();
+// find with left join address
+$users = $model
+    ->leftJoin("address", "user_id", "id")
+    ->find()
+    ->fetch(true);
+
+if ($users) {
+    foreach ($users as $user) {
+        var_dump($user->data());
+    }
+} else {
+    echo "<h2>Not Users</h2>";
+}
+
+$model = new User();
+// find with right join address
+$users = $model
+    ->rightJoin("address", "user_id", "id")
+    ->find()
+    ->fetch(true);
+
+if ($users) {
+    foreach ($users as $user) {
+        var_dump($user->data());
+    }
+} else {
+    echo "<h2>Not Users</h2>";
+}
 ```
 
 #### save create

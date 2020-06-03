@@ -51,6 +51,18 @@ abstract class DataLayer
     /** @var object|null */
     protected $data;
 
+    /** @var array */
+    protected $join;
+
+    /** @var array */
+    protected $leftJoin;
+
+    /** @var array */
+    protected $rightJoin;
+
+    /** @var array */
+    protected $where;
+
     /**
      * DataLayer constructor.
      * @param string $entity
@@ -143,6 +155,19 @@ abstract class DataLayer
     }
 
     /**
+     * for use with the new functions:
+     * join(), leftJoin(), rightJoin(), where(), whereRaw(), whereIn()
+     *
+     * @param bool $all
+     * @return null|array|mixed|DataLayer
+     */
+    public function get(bool $all = false)
+    {
+        $find = $this->find();
+        return $find->fetch($all);
+    }
+
+    /**
      * @param string $column
      * @return DataLayer|null
      */
@@ -183,12 +208,145 @@ abstract class DataLayer
     }
 
     /**
+     * @param string $table
+     * @param mixed ...$args
+     * @return DataLayer
+     */
+    public function join(string $table, ...$args): DataLayer
+    {
+        if (!$args[0] instanceof \Closure && $args[0] && $args[1]) {
+            $this->join[] = " INNER JOIN {$table} ON ({$table}.{$args[0]} = {$this->entity}.{$args[1]}) ";
+        }
+        return $this;
+    }
+
+    /**
+     * @param string $table
+     * @param mixed ...$args
+     * @return DataLayer
+     */
+    public function leftJoin(string $table, ...$args): DataLayer
+    {
+        if (!$args[0] instanceof \Closure && $args[0] && $args[1]) {
+            $this->leftJoin[] = " LEFT OUTER JOIN {$table} ON ({$table}.{$args[0]} = {$this->entity}.{$args[1]}) ";
+        }
+        return $this;
+    }
+
+    /**
+     * @param string $table
+     * @param mixed ...$args
+     * @return DataLayer
+     */
+    public function rightJoin(string $table, ...$args): DataLayer
+    {
+        if (!$args[0] instanceof \Closure && $args[0] && $args[1]) {
+            $this->rightJoin[] = " RIGHT OUTER JOIN {$table} ON ({$table}.{$args[0]} = {$this->entity}.{$args[1]}) ";
+        }
+        return $this;
+    }
+
+    /**
+     * @param string $whereRaw
+     * @return DataLayer
+     */
+    public function whereRaw(string $whereRaw): DataLayer
+    {
+        $this->where[] = " {$whereRaw} ";
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @param array $values
+     * @return DataLayer
+     */
+    public function whereIn(string $field, array $values = []): DataLayer
+    {
+        $this->where[] = " {$field} IN (" . implode(",", $values) . ")";
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @param string $operator
+     * @param $value
+     * @return DataLayer
+     */
+    public function where(string $field, string $operator, $value): DataLayer
+    {
+        $this->where[] = " {$field} {$operator} :" . str_replace(".", "_", $field);
+        $params = "{$field}={$value}";
+        $this->concatParams($params);
+        parse_str($params, $this->params);
+        return $this;
+    }
+
+    /**
+     * @param string|null $params
+     */
+    private function concatParams(?string &$params): void
+    {
+        if ($this->params) {
+            foreach ($this->params as $key => $value) {
+                $params .= "&{$key}={$value}";
+            }
+        }
+    }
+
+    /**
+     * clauseWhere
+     * @return void
+     */
+    private function clauseWhere(): void
+    {
+        if ($this->where) {
+            foreach ($this->where as $key => $value) {
+                if (strpos($this->statement, "WHERE") === false) {
+                    $this->statement .= " WHERE {$value} ";
+                } else {
+                    $this->statement .= " AND {$value} ";
+                }
+            }
+        }
+    }
+
+    /**
+     * clauseJoins
+     * @return void
+     */
+    private function clauseJoins(): void
+    {
+        if ($this->join) {
+            foreach ($this->join as $key => $value) {
+                $this->statement .= $value;
+            }
+        }
+
+        if ($this->leftJoin) {
+            foreach ($this->leftJoin as $key => $value) {
+                $this->statement .= $value;
+            }
+        }
+
+        if ($this->rightJoin) {
+            foreach ($this->rightJoin as $key => $value) {
+                $this->statement .= $value;
+            }
+        }
+    }
+
+    /**
      * @param bool $all
      * @return array|mixed|null
      */
     public function fetch(bool $all = false)
     {
         try {
+
+            $this->clauseJoins();
+            $this->clauseWhere();
+
             $stmt = Connect::getInstance()->prepare($this->statement . $this->group . $this->order . $this->limit . $this->offset);
             $stmt->execute($this->params);
 

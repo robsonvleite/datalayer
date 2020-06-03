@@ -23,4 +23,4 @@ if ($error) {
  * FETCH DATA
  */
 $users = $connect->query("SELECT * FROM users LIMIT 5");
-var_dump($users->fetchAll());
+dd($users->fetchAll());

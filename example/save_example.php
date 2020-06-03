@@ -12,7 +12,7 @@ use Example\Models\User;
 /*
  * USER MODEL
  */
-print "new user model";
+print "<h1>new user model</h1>";
 
 $user = new User;
 $user->first_name = "Robson";
@@ -20,21 +20,21 @@ $user->last_name = "V. Leite";
 $user->genre = "m";
 $user->save();
 
-var_dump($user);
+dd($user);
 
 /*
  * UPDATE USER
  */
-print "update user";
+print "<h1>update user</h1>";
 
 $name = ["Robson", "Kaue", "Gustavo", "João"];
 
-$user = (new User())->findById(10000);
+$user = (new User())->findById(56);
 
 if ($user) {
     $user->first_name = $name[rand(0, 3)];
     $user->save();
-    var_dump($user);
+    dd($user);
 } else {
     echo "<h2>Not User</h2>";
 }
@@ -42,7 +42,7 @@ if ($user) {
 /*
  * ADDR MODEL PRIMARY KEY CHANGED
  */
-print "addr model";
+print "<h1>addr model</h1>";
 
 $addr = new Address;
 $addr->address = "Rua Nome Da Rua 001";
@@ -50,8 +50,8 @@ $address = $addr->save();
 
 if (!$address) {
     echo "<h2>{$addr->fail()->getMessage()}</h2>";
-    var_dump($addr->fail());
+    dd($addr->fail());
     die;
 }
 
-var_dump($addr);
+dd($addr);

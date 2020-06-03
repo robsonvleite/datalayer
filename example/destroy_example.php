@@ -12,9 +12,9 @@ use Example\Models\User;
 /*
  * USER REMOVE
  */
-print "user remove";
+print "<h1>user remove</h1>";
 
-$users = (new User())->find("id > :id", "id=1")->fetch(true);
+$users = (new User())->find("id > :id", "id=55")->fetch(true);
 
 if ($users) {
     foreach ($users as $user) {
@@ -25,7 +25,7 @@ if ($users) {
 /**
  * ADDR REMOVE
  */
-print "<hr>addr remove";
+print "<hr><h1>addr remove</h1>";
 
 $addrs = (new Address())->find("address_id > :id", "id=1")->fetch(true);
 
