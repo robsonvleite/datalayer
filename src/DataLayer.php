@@ -104,6 +104,16 @@ abstract class DataLayer
     {
         return $this->data;
     }
+    
+    /**
+     * @param array|null $data
+     *
+     * @return object|null
+     */
+    public function setData(?array $data): ?object
+    {
+        return $this->data = (object)$data;
+    }
 
     /**
      * @return PDOException|Exception|null
