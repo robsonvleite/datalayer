@@ -112,7 +112,8 @@ abstract class DataLayer
      */
     public function setData(?array $data): ?object
     {
-        return $this->data = (object)$data;
+        $array = array_replace_recursive((array)$this->data, $data);
+        return $this->data = (object)$array;
     }
 
     /**
