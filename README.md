@@ -117,6 +117,10 @@ foreach ($users as $user) {
 //find one user by condition
 $user = $model->find("first_name = :name", "name=Robson")->fetch();
 echo $user->first_name;
+
+//find one user by two conditions
+$user = $model->find("first_name = :name AND last_name = :last", "name=Robson&last=Leite")->fetch();
+echo $user->first_name . " " . $user->first_last;
 ```
 
 #### findById
