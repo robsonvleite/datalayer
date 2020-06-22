@@ -15,6 +15,6 @@ class Address extends DataLayer
      */
     public function __construct()
     {
-        parent::__construct("address", [], 'address_id');
+        parent::__construct("adresses", ["user_id"]);
     }
 }
