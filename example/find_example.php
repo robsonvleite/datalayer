@@ -19,6 +19,8 @@ print "findById";
 $user = $model->findById(20);
 var_dump($user->data());
 
+echo "<h1>{$user->full_name}</h1>";
+
 /**
  * FIND EXAMPLE
  */

@@ -189,6 +189,27 @@ if($user->fail()){
 }
 ```
 
+### custom data method
+
+````php
+class User{
+    //...
+
+    public function fullName(): string 
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+    
+    public function document(): string
+    {
+        return "Restrict";
+    }
+}
+
+echo $this->full_name; //Robson V. leite
+echo $this->document; //Restrict
+```` 
+
 ## Contributing
 
 Please see [CONTRIBUTING](https://github.com/robsonvleite/datalayer/blob/master/CONTRIBUTING.md) for details.

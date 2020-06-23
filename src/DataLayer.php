@@ -94,6 +94,11 @@ abstract class DataLayer
      */
     public function __get($name)
     {
+        $method = $this->toCamelCase($name);
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        }
+
         return ($this->data->$name ?? null);
     }
 
@@ -289,5 +294,17 @@ abstract class DataLayer
         $safe = (array)$this->data;
         unset($safe[$this->primary]);
         return $safe;
+    }
+
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    protected function toCamelCase(string $string): string
+    {
+        $camelCase = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+        $camelCase[0] = strtolower($camelCase[0]);
+        return $camelCase;
     }
 }
