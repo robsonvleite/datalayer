@@ -206,7 +206,7 @@ class User{
     }
 }
 
-echo $this->full_name; //Robson V. leite
+echo $this->full_name; //Robson V. Leite
 echo $this->document; //Restrict
 ```` 
 
