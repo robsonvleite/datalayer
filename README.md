@@ -189,7 +189,7 @@ if($user->fail()){
 }
 ```
 
-### custom data method
+#### custom data method
 
 ````php
 class User{
