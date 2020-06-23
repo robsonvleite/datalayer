@@ -34,7 +34,6 @@ class Connect
                 self::$error = $exception;
             }
         }
-
         return self::$instance;
     }
 

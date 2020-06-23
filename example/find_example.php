@@ -17,7 +17,7 @@ var_dump($model);
 
 print "findById";
 $user = $model->findById(20);
-var_dump($user);
+var_dump($user->data());
 
 /**
  * FIND EXAMPLE

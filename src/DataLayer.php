@@ -138,8 +138,7 @@ abstract class DataLayer
      */
     public function findById(int $id, string $columns = "*"): ?DataLayer
     {
-        $find = $this->find($this->primary . " = :id", "id={$id}", $columns);
-        return $find->fetch();
+        return $this->find($this->primary . " = :id", "id={$id}", $columns);
     }
 
     /**
@@ -265,8 +264,7 @@ abstract class DataLayer
             return false;
         }
 
-        $destroy = $this->delete($this->primary . " = :id", "id={$id}");
-        return $destroy;
+        return $this->delete($this->primary . " = :id", "id={$id}");
     }
 
     /**
@@ -290,7 +288,6 @@ abstract class DataLayer
     {
         $safe = (array)$this->data;
         unset($safe[$this->primary]);
-
         return $safe;
     }
 }
