@@ -5,7 +5,10 @@ require '../vendor/autoload.php';
 
 require 'Models/User.php';
 require 'Models/Address.php';
+require 'Models/Company.php';
 
+use Example\Models\Address;
+use Example\Models\Company;
 use Example\Models\User;
 
 /*
@@ -43,3 +46,17 @@ if ($users) {
 } else {
     echo "<h2>Not Users</h2>";
 }
+
+print "secure params";
+$params = http_build_query(["name" => "UpInside & Associated"]);
+$company = (new Company())->find("name = :name", $params);
+var_dump($company, $company->fetch());
+
+
+print "join method";
+
+$addresses = new Address();
+$address = $addresses->findById(22);
+//get user data to this->user->[all data]
+$address->user();
+var_dump($address);

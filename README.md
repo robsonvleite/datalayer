@@ -134,6 +134,28 @@ $user = $model->findById(2);
 echo $user->first_name;
 ```
 
+#### secure params
+######See example find_example.php and model classes
+Consulte exemplo find_example.php e classes modelo
+
+```php
+$params = http_build_query(["name" => "UpInside & Associated"]);
+$company = (new Company())->find("name = :name", $params);
+var_dump($company, $company->fetch());
+```
+
+#### join method
+######See example find_example.php and model classes
+Consulte exemplo find_example.php e classes modelo
+
+```php
+$addresses = new Address();
+$address = $addresses->findById(22);
+//get user data to this->user->[all data]
+$address->user();
+var_dump($address);
+```
+
 #### count
 
 ```php
