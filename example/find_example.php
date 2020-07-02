@@ -22,6 +22,7 @@ print "findById";
 $user = $model->findById(20);
 var_dump($user->data());
 
+var_dump($user->first_name);
 echo "<h1>{$user->full_name}</h1>";
 
 /**
