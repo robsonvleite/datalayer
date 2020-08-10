@@ -51,6 +51,9 @@ abstract class DataLayer
     /** @var object|null */
     protected $data;
 
+    /** @var array|null */
+    protected $columns;
+
     /**
      * DataLayer constructor.
      * @param string $entity
@@ -64,6 +67,7 @@ abstract class DataLayer
         $this->primary = $primary;
         $this->required = $required;
         $this->timestamps = $timestamps;
+        $this->columns = $this->getColumns();
     }
 
     /**
@@ -105,6 +109,17 @@ abstract class DataLayer
 
         return ($this->data->$name ?? null);
     }
+
+     /*
+     * @return array|null
+     */
+    private function getColumns() : ?array
+    {
+        $stmt = Connect::getInstance()->prepare( "DESCRIBE {$this->entity}");
+        $stmt->execute($this->params);
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+    
 
     /**
      * @return object|null
