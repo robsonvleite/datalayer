@@ -14,7 +14,10 @@ class Course extends DataLayer
         parent::__construct("courses", ["name"], "id", false);
     }
 
-    public function studentsWhoPrefer()
+    /**
+     * @return array|null
+     */
+    public function studentsWhoPrefer(): ?array
     {
         $students = new Student();
         return $this
@@ -29,7 +32,10 @@ class Course extends DataLayer
             ->fetch(true);
     }
 
-    public function studentsThatFinished()
+    /**
+     * @return array|null
+     */
+    public function studentsThatFinished(): ?array
     {
         $students = new Student();
         $studentCourse = new StudentCourse();
