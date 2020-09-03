@@ -189,6 +189,28 @@ abstract class DataLayer
         $this->offset = " OFFSET {$offset}";
         return $this;
     }
+    
+    /**
+     * @param string $columns
+     * @return DataLayer|null
+     */
+    public function select(string $columns = "*"): ?DataLayer
+    {
+        $this->statement = "SELECT {$columns} FROM {$this->entity}";
+        return $this;
+    }
+
+    /**
+     * @param string|null $terms
+     * @param string|null $params
+     * @return DataLayer|null
+     */
+    public function where(?string $terms = null, ?string $params = null): ?DataLayer
+    {
+        $this->statement .= " WHERE {$terms}";
+        parse_str($params, $this->params);
+        return $this;
+    }
 
     /**
      * @param bool $all
