@@ -31,6 +31,9 @@ abstract class DataLayer
     protected $statement;
 
     /** @var string */
+    protected $join;
+
+    /** @var string */
     protected $params;
 
     /** @var string */
@@ -199,7 +202,6 @@ abstract class DataLayer
         $this->statement = "SELECT {$columns} FROM {$this->entity}";
         return $this;
     }
-
     /**
      * @param string|null $terms
      * @param string|null $params
@@ -209,6 +211,28 @@ abstract class DataLayer
     {
         $this->statement .= " WHERE {$terms}";
         parse_str($params, $this->params);
+        return $this;
+    }
+
+    /**
+     * @param DataLayer $otherEntity
+     * @param string $column1
+     * @param string $operation
+     * @param string $column2
+     * @param string $type
+     * @return DataLayer|null
+     */
+    public function join(
+        DataLayer $otherEntity, 
+        string $column1,
+        string $operation,
+        string $column2,
+        string $type = 'INNER'
+    ): ?DataLayer {
+        $join = "${type} JOIN {$otherEntity->entity} on {$column1} {$operation} {$column2}";
+
+        $this->statement .= " " . $join;
+
         return $this;
     }
 
@@ -229,7 +253,7 @@ abstract class DataLayer
             if ($all) {
                 return $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
             }
-
+            
             return $stmt->fetchObject(static::class);
         } catch (PDOException $exception) {
             $this->fail = $exception;
