@@ -219,7 +219,7 @@ abstract class DataLayer
      * @param string $column1
      * @param string $operation
      * @param string $column2
-     * @param string $type
+     * @param string $type INNER, LEFT (OUTER) or RIGHT (OUTER)
      * @return DataLayer|null
      */
     public function join(
