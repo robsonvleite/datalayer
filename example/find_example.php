@@ -19,7 +19,7 @@ $model = new User();
 var_dump($model);
 
 print "findById";
-$user = $model->findById(20);
+$user = $model->findById(1);
 var_dump($user->data());
 
 var_dump($user->first_name);
@@ -57,7 +57,13 @@ var_dump($company, $company->fetch());
 print "join method";
 
 $addresses = new Address();
-$address = $addresses->findById(22);
+$address = $addresses->findById(1);
 //get user data to this->user->[all data]
 $address->user();
 var_dump($address);
+
+
+print "consult table columns";
+
+//var_dump($user->columns()); //object
+var_dump($user->columns(PDO::FETCH_COLUMN));
