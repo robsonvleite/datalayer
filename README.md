@@ -49,7 +49,7 @@ Para mais detalhes sobre como usar o Data Layer, veja a pasta de exemplo com det
 
 #### connection
 
-######To begin using the Data Layer, you need to connect to the database (MariaDB / MySql). For more connections [PDO connections manual on PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
+###### To begin using the Data Layer, you need to connect to the database (MariaDB / MySql). For more connections [PDO connections manual on PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
 
 Para começar a usar o Data Layer precisamos de uma conexão com o seu banco de dados. Para ver as conexões possíveis acesse o [manual de conexões do PDO em PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
 
@@ -72,7 +72,7 @@ define("DATA_LAYER_CONFIG", [
 
 #### your model
 
-######The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer.
+###### The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer.
 
 O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para consumir é necessário criar o modelo de sua tabela e herdar o Data Layer.
 
@@ -135,7 +135,7 @@ echo $user->first_name;
 ```
 
 #### secure params
-######See example find_example.php and model classes
+###### See example find_example.php and model classes
 Consulte exemplo find_example.php e classes modelo
 
 ```php
@@ -145,7 +145,7 @@ var_dump($company, $company->fetch());
 ```
 
 #### join method
-######See example find_example.php and model classes
+###### See example find_example.php and model classes
 Consulte exemplo find_example.php e classes modelo
 
 ```php
