@@ -15,7 +15,7 @@ class User extends DataLayer
      */
     public function __construct()
     {
-        parent::__construct("users", ["first_name", "last_name"]);
+        parent::__construct("users", ["first_name", "last_name"], "id", true, DATA_LAYER_CONFIG_2);
     }
 
     public function fullName()

@@ -20,20 +20,21 @@ class Connect
     /**
      * @return PDO
      */
-    public static function getInstance(): ?PDO
+    public static function getInstance($bd): ?PDO
     {
         if (empty(self::$instance)) {
             try {
                 self::$instance = new PDO(
-                    DATA_LAYER_CONFIG["driver"] . ":host=" . DATA_LAYER_CONFIG["host"] . ";dbname=" . DATA_LAYER_CONFIG["dbname"] . ";port=" . DATA_LAYER_CONFIG["port"],
-                    DATA_LAYER_CONFIG["username"],
-                    DATA_LAYER_CONFIG["passwd"],
-                    DATA_LAYER_CONFIG["options"]
+                    $bd["driver"] . ":host=" . $bd["host"] . ";dbname=" . $bd["dbname"] . ";port=" . $bd["port"],
+                    $bd["username"],
+                    $bd["passwd"],
+                    $bd["options"]
                 );
             } catch (PDOException $exception) {
                 self::$error = $exception;
             }
         }
+
         return self::$instance;
     }
 
@@ -49,14 +50,14 @@ class Connect
     /**
      * Connect constructor.
      */
-    private function __construct()
+    final private function __construct()
     {
     }
 
     /**
      * Connect clone.
      */
-    private function __clone()
+    final private function __clone()
     {
     }
 }
