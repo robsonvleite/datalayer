@@ -51,7 +51,7 @@ Para mais detalhes sobre como usar o Data Layer, veja a pasta de exemplo com det
 
 ###### To begin using the Data Layer, you need to connect to the database (MariaDB / MySql). For more connections [PDO connections manual on PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
 
-Para começar a usar o Data Layer precisamos de uma conexão com o seu banco de dados. Para ver as conexões possíveis acesse o [manual de conexões do PDO em PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
+Para começar a usar o Data Layer precisamos de uma conexão com o seu banco de dados. Você pode ter várias conexões ao mesmo tempo entre várias base de dados, basta informar qual conexão usar no contrutor do model. Para ver as conexões possíveis acesse o [manual de conexões do PDO em PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
 
 ```php
 define("DATA_LAYER_CONFIG", [
@@ -68,13 +68,28 @@ define("DATA_LAYER_CONFIG", [
         PDO::ATTR_CASE => PDO::CASE_NATURAL
     ]
 ]);
+
+define("DATA_LAYER_CONFIG_2", [
+   "driver" => "pgsql",
+   "host" => "localhost",
+   "port" => "5432",
+   "dbname" => "datalayer",
+   "username" => "postgres",
+   "passwd" => "",
+   "options" => [
+       PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+       PDO::ATTR_CASE => PDO::CASE_NATURAL
+   ],
+]);
 ```
 
 #### your model
 
 ###### The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer.
 
-O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para consumir é necessário criar o modelo de sua tabela e herdar o Data Layer.
+O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para consumir é necessário criar o modelo de sua tabela e herdar o Data Layer. Caso não especifique uma conexão, ela usa por padrão a DATA_LAYER_CONFIG.
 
 ```php
 class User extends DataLayer
@@ -84,8 +99,8 @@ class User extends DataLayer
      */
     public function __construct()
     {
-        //string "TABLE_NAME", array ["REQUIRED_FIELD_1", "REQUIRED_FIELD_2"], string "PRIMARY_KEY", bool "TIMESTAMPS"
-        parent::__construct("users", ["first_name", "last_name"]);
+        //string "TABLE_NAME", array ["REQUIRED_FIELD_1", "REQUIRED_FIELD_2"], string "PRIMARY_KEY", bool "TIMESTAMPS", array "DB"
+        parent::__construct("users", ["first_name", "last_name"], "id", true, DATA_LAYER_CONFIG_2);
     }
 }
 ```
