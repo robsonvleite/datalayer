@@ -252,7 +252,8 @@ abstract class DataLayer
             /** Update */
             if (!empty($this->data->$primary)) {
                 $id = $this->data->$primary;
-                if(!$this->update($this->safe(), "{$this->primary} = :id", "id={$id}")) {
+                $update = $this->update($this->safe(), "{$this->primary} = :id", "id={$id}");
+                if ($update === null) {
                     return false;
                 }
             }
@@ -297,7 +298,7 @@ abstract class DataLayer
         $data = (array)$this->data();
         foreach ($this->required as $field) {
             if (empty($data[$field])) {
-                if(!is_int($data[$field])){
+                if (!is_int($data[$field])) {
                     return false;
                 }
             }

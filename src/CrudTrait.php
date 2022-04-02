@@ -61,7 +61,7 @@ trait CrudTrait
 
             $stmt = Connect::getInstance()->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");
             $stmt->execute($this->filter(array_merge($data, $params)));
-            return ($stmt->rowCount() ?? 1);
+            return $stmt->rowCount();
         } catch (PDOException $exception) {
             $this->fail = $exception;
             return null;
