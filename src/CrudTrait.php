@@ -3,7 +3,6 @@
 namespace CoffeeCode\DataLayer;
 
 use DateTime;
-use Exception;
 use PDOException;
 
 /**
@@ -15,7 +14,7 @@ trait CrudTrait
     /**
      * @param array $data
      * @return int|null
-     * @throws Exception
+     * @throws PDOException
      */
     protected function create(array $data): ?int
     {
@@ -43,7 +42,7 @@ trait CrudTrait
      * @param string $terms
      * @param string $params
      * @return int|null
-     * @throws Exception
+     * @throws PDOException
      */
     protected function update(array $data, string $terms, string $params): ?int
     {

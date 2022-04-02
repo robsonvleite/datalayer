@@ -2,7 +2,6 @@
 
 namespace CoffeeCode\DataLayer;
 
-use Exception;
 use PDO;
 use PDOException;
 use stdClass;
@@ -45,7 +44,7 @@ abstract class DataLayer
     /** @var int */
     protected $offset;
 
-    /** @var \PDOException|null */
+    /** @var PDOException|null */
     protected $fail;
 
     /** @var object|null */
@@ -106,10 +105,11 @@ abstract class DataLayer
         return ($this->data->$name ?? null);
     }
 
-    /*
-    * @return PDO mode
-    */
-    public function columns($mode = PDO::FETCH_OBJ)
+    /**
+     * @param int $mode
+     * @return array
+     */
+    public function columns($mode = PDO::FETCH_OBJ): ?array
     {
         $stmt = Connect::getInstance()->prepare("DESCRIBE {$this->entity}");
         $stmt->execute($this->params);
@@ -126,9 +126,9 @@ abstract class DataLayer
     }
 
     /**
-     * @return PDOException|Exception|null
+     * @return PDOException|null
      */
-    public function fail()
+    public function fail(): ?PDOException
     {
         return $this->fail;
     }
@@ -246,7 +246,7 @@ abstract class DataLayer
 
         try {
             if (!$this->required()) {
-                throw new Exception("Preencha os campos necessários");
+                throw new PDOException("Preencha os campos necessários");
             }
 
             /** Update */
@@ -269,7 +269,7 @@ abstract class DataLayer
 
             $this->data = $this->findById($id)->data();
             return true;
-        } catch (Exception $exception) {
+        } catch (PDOException $exception) {
             $this->fail = $exception;
             return false;
         }
