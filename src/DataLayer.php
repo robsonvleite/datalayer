@@ -243,6 +243,7 @@ abstract class DataLayer
     {
         $primary = $this->primary;
         $id = null;
+        $save = null;
 
         try {
             if (!$this->required()) {
@@ -252,18 +253,16 @@ abstract class DataLayer
             /** Update */
             if (!empty($this->data->$primary)) {
                 $id = $this->data->$primary;
-                $update = $this->update($this->safe(), "{$this->primary} = :id", "id={$id}");
-                if ($update === null) {
-                    return false;
-                }
+                $save = $this->update($this->safe(), "{$this->primary} = :id", "id={$id}");
             }
 
             /** Create */
             if (empty($this->data->$primary)) {
                 $id = $this->create($this->safe());
+                $save = $id;
             }
 
-            if (!$id) {
+            if ($save === null) {
                 return false;
             }
 
