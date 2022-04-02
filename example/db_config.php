@@ -1,6 +1,6 @@
 <?php
 
-define("DATA_LAYER_CONFIG", [
+const DATA_LAYER_CONFIG = [
     "driver" => "mysql",
     "host" => "localhost",
     "port" => "3306",
@@ -13,9 +13,9 @@ define("DATA_LAYER_CONFIG", [
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
         PDO::ATTR_CASE => PDO::CASE_NATURAL
     ]
-]);
+];
 
-//define("DATA_LAYER_CONFIG", [
+//const DATA_LAYER_CONFIG = [
 //    "driver" => "pgsql",
 //    "host" => "localhost",
 //    "port" => "5432",
@@ -28,4 +28,4 @@ define("DATA_LAYER_CONFIG", [
 //        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
 //        PDO::ATTR_CASE => PDO::CASE_NATURAL
 //    ],
-//]);
+//];

@@ -27,10 +27,10 @@ trait CrudTrait
             $columns = implode(", ", array_keys($data));
             $values = ":" . implode(", :", array_keys($data));
 
-            $stmt = Connect::getInstance()->prepare("INSERT INTO {$this->entity} ({$columns}) VALUES ({$values})");
+            $stmt = Connect::getInstance($this->database)->prepare("INSERT INTO {$this->entity} ({$columns}) VALUES ({$values})");
             $stmt->execute($this->filter($data));
 
-            return Connect::getInstance()->lastInsertId();
+            return Connect::getInstance($this->database)->lastInsertId();
         } catch (PDOException $exception) {
             $this->fail = $exception;
             return null;
@@ -58,7 +58,7 @@ trait CrudTrait
             $dateSet = implode(", ", $dateSet);
             parse_str($params, $params);
 
-            $stmt = Connect::getInstance()->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");
+            $stmt = Connect::getInstance($this->database)->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");
             $stmt->execute($this->filter(array_merge($data, $params)));
             return $stmt->rowCount();
         } catch (PDOException $exception) {
@@ -75,7 +75,7 @@ trait CrudTrait
     public function delete(string $terms, ?string $params): bool
     {
         try {
-            $stmt = Connect::getInstance()->prepare("DELETE FROM {$this->entity} WHERE {$terms}");
+            $stmt = Connect::getInstance($this->database)->prepare("DELETE FROM {$this->entity} WHERE {$terms}");
             if ($params) {
                 parse_str($params, $params);
                 $stmt->execute($params);

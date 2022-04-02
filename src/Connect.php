@@ -18,22 +18,25 @@ class Connect
     private static ?PDOException $error = null;
 
     /**
+     * @param array|null $database
      * @return PDO|null
      */
-    public static function getInstance(): ?PDO
+    public static function getInstance(?array $database = null): ?PDO
     {
-        if (empty(self::$instance)) {
+        if (empty(self::$instance) || $database != DATA_LAYER_CONFIG) {
+            $db = $database ?? DATA_LAYER_CONFIG;
             try {
                 self::$instance = new PDO(
-                    DATA_LAYER_CONFIG["driver"] . ":host=" . DATA_LAYER_CONFIG["host"] . ";dbname=" . DATA_LAYER_CONFIG["dbname"] . ";port=" . DATA_LAYER_CONFIG["port"],
-                    DATA_LAYER_CONFIG["username"],
-                    DATA_LAYER_CONFIG["passwd"],
-                    DATA_LAYER_CONFIG["options"]
+                    $db["driver"] . ":host=" . $db["host"] . ";dbname=" . $db["dbname"] . ";port=" . $db["port"],
+                    $db["username"],
+                    $db["passwd"],
+                    $db["options"]
                 );
             } catch (PDOException $exception) {
                 self::$error = $exception;
             }
         }
+
         return self::$instance;
     }
 

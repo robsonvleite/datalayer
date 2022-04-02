@@ -26,6 +26,9 @@ abstract class DataLayer
     /** @var bool $timestamps control created and updated at */
     private bool $timestamps;
 
+    /** @var array|null */
+    private ?array $database = null;
+
     /** @var string|null */
     protected ?string $statement = null;
 
@@ -57,12 +60,18 @@ abstract class DataLayer
      * @param string $primary
      * @param bool $timestamps
      */
-    public function __construct(string $entity, array $required, string $primary = 'id', bool $timestamps = true)
-    {
+    public function __construct(
+        string $entity,
+        array $required,
+        string $primary = 'id',
+        bool $timestamps = true,
+        array $database = null
+    ) {
         $this->entity = $entity;
         $this->primary = $primary;
         $this->required = $required;
         $this->timestamps = $timestamps;
+        $this->database = $database;
     }
 
     /**
@@ -111,7 +120,7 @@ abstract class DataLayer
      */
     public function columns($mode = PDO::FETCH_OBJ): ?array
     {
-        $stmt = Connect::getInstance()->prepare("DESCRIBE {$this->entity}");
+        $stmt = Connect::getInstance($this->database)->prepare("DESCRIBE {$this->entity}");
         $stmt->execute($this->params);
         return $stmt->fetchAll($mode);
     }
@@ -208,7 +217,7 @@ abstract class DataLayer
     public function fetch(bool $all = false)
     {
         try {
-            $stmt = Connect::getInstance()->prepare(
+            $stmt = Connect::getInstance($this->database)->prepare(
                 $this->statement . $this->group . $this->order . $this->limit . $this->offset
             );
             $stmt->execute($this->params);
@@ -233,7 +242,7 @@ abstract class DataLayer
      */
     public function count(): int
     {
-        $stmt = Connect::getInstance()->prepare($this->statement);
+        $stmt = Connect::getInstance($this->database)->prepare($this->statement);
         $stmt->execute($this->params);
         return $stmt->rowCount();
     }
