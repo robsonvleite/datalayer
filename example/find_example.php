@@ -14,56 +14,52 @@ use Example\Models\User;
 /*
  * MODEL
  */
-print "model";
-$model = new User();
-var_dump($model);
+echo "<h1>User Model</h1>";
+$user = new User();
+var_dump($user);
 
-print "findById";
-$user = $model->findById(1);
-var_dump($user->data());
-
-var_dump($user->first_name);
-echo "<h1>{$user->full_name}</h1>";
+echo "<h1>Find By Id</h1>";
+$user = (new User())->findById(4);
+var_dump($user->data(), [$user->first_name, $user->full_name]);
 
 /**
  * FIND EXAMPLE
  */
-print "find";
-//$users = $model->find()->fetch(true);
-//$users = $model->find()->group("genre")->fetch(true);
-//$users = $model->find()->limit(2)->fetch(true);
-//$users = $model->find()->limit(2)->offset(2)->fetch(true);
-//$users = $model->find()->limit(2)->offset(2)->fetch("last_name DESC");
-//$users = $model->find()->limit(2)->offset(2)->order("RAND()")->fetch(true);
+echo "<h1>Find</h1>";
+//$result = $user->find()->fetch(true);
+//$result = $user->find()->group("genre")->fetch(true);
+//$result = $user->find()->limit(4)->fetch(true);
+//$result = $user->find()->limit(2)->offset(2)->fetch(true);
+//$result = $user->find()->limit(4)->offset(2)->order("id DESC")->fetch(true);
+//$result = $user->find()->limit(2)->offset(2)->order("RAND()")->fetch(true);
 
-$users = $model->find()->limit(1)->fetch(true);
-$totalUsers = $model->find()->count();
-var_dump($totalUsers);
+$result = $user->find()->limit(1)->fetch(true);
+$totalUsers = $user->find()->count();
+echo "<h2>{$totalUsers} cadastros!</h2>";
 
-if ($users) {
-    foreach ($users as $user) {
+if ($result) {
+    foreach ($result as $user) {
         var_dump($user->data());
     }
 } else {
     echo "<h2>Not Users</h2>";
 }
 
-print "secure params";
-$params = http_build_query(["name" => "UpInside & Associated"]);
+echo "<h1>Secure Params</h1>";
+$params = http_build_query(["name" => "UpInside"]);
 $company = (new Company())->find("name = :name", $params);
-var_dump($company, $company->fetch());
+var_dump($company->fetch()->data());
 
 
-print "join method";
+echo "<h1>Join</h1>";
 
 $addresses = new Address();
 $address = $addresses->findById(1);
-//get user data to this->user->[all data]
-$address->user();
-var_dump($address);
+$address->getUser();
 
+var_dump($address->data());
 
-print "consult table columns";
+echo "<h1>Table Columns</h1>";
 
-//var_dump($user->columns()); //object
+var_dump($user->columns()); //object
 var_dump($user->columns(PDO::FETCH_COLUMN));

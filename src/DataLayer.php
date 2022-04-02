@@ -15,40 +15,40 @@ abstract class DataLayer
     use CrudTrait;
 
     /** @var string $entity database table */
-    private $entity;
+    private string $entity;
 
     /** @var string $primary table primary key field */
-    private $primary;
+    private string $primary;
 
     /** @var array $required table required fields */
-    private $required;
+    private array $required;
 
-    /** @var string $timestamps control created and updated at */
-    private $timestamps;
+    /** @var bool $timestamps control created and updated at */
+    private bool $timestamps;
 
-    /** @var string */
-    protected $statement;
+    /** @var string|null */
+    protected ?string $statement = null;
 
-    /** @var string */
-    protected $params;
-
-    /** @var string */
-    protected $group;
+    /** @var array|null */
+    protected ?array $params = null;
 
     /** @var string */
-    protected $order;
+    protected ?string $group = null;
+
+    /** @var string|null */
+    protected ?string $order = null;
 
     /** @var int */
-    protected $limit;
+    protected ?string $limit = null;
 
     /** @var int */
-    protected $offset;
+    protected ?int $offset = null;
 
     /** @var PDOException|null */
-    protected $fail;
+    protected ?PDOException $fail = null;
 
     /** @var object|null */
-    protected $data;
+    protected ?object $data = null;
 
     /**
      * DataLayer constructor.
@@ -208,7 +208,9 @@ abstract class DataLayer
     public function fetch(bool $all = false)
     {
         try {
-            $stmt = Connect::getInstance()->prepare($this->statement . $this->group . $this->order . $this->limit . $this->offset);
+            $stmt = Connect::getInstance()->prepare(
+                $this->statement . $this->group . $this->order . $this->limit . $this->offset
+            );
             $stmt->execute($this->params);
 
             if (!$stmt->rowCount()) {

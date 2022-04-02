@@ -73,7 +73,7 @@ if ($addr) {
     if ($addr->save()) {
         echo "Endereço atualizado!";
         var_dump($addr->data());
-        var_dump($addr->user()->data());
+        var_dump($addr->getUser()->data());
     } else {
         echo "<h2>{$addr->fail()->getMessage()}</h2>";
         var_dump($addr->fail());

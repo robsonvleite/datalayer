@@ -12,13 +12,13 @@ use PDOException;
 class Connect
 {
     /** @var PDO */
-    private static $instance;
+    private static PDO $instance;
 
-    /** @var PDOException */
-    private static $error;
+    /** @var PDOException|null */
+    private static ?PDOException $error = null;
 
     /**
-     * @return PDO
+     * @return PDO|null
      */
     public static function getInstance(): ?PDO
     {
