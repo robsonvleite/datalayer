@@ -18,6 +18,9 @@ class Address extends DataLayer
         parent::__construct("adresses", ["user_id"]);
     }
 
+    /**
+     * @return $this
+     */
     public function getUser(): Address
     {
         $this->user = (new User())->findById($this->user_id)->data();
