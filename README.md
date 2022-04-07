@@ -256,6 +256,8 @@ echo $this->document; //Restrict
 
 ## Contributing
 
+![GitHub Contributors Image](https://contrib.rocks/image?repo=robsonvleite/datalayer)
+
 Please see [CONTRIBUTING](https://github.com/robsonvleite/datalayer/blob/master/CONTRIBUTING.md) for details.
 
 ## Support
