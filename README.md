@@ -5,19 +5,20 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/coffeecode/datalayer.svg?style=flat-square)](https://packagist.org/packages/coffeecode/datalayer)
 [![Latest Version](https://img.shields.io/github/release/robsonvleite/datalayer.svg?style=flat-square)](https://github.com/robsonvleite/datalayer/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Build](https://img.shields.io/scrutinizer/build/g/robsonvleite/datalayer.svg?style=flat-square)](https://scrutinizer-ci.com/g/robsonvleite/datalayer)
 [![Quality Score](https://img.shields.io/scrutinizer/g/robsonvleite/datalayer.svg?style=flat-square)](https://scrutinizer-ci.com/g/robsonvleite/datalayer)
 [![Total Downloads](https://img.shields.io/packagist/dt/coffeecode/datalayer.svg?style=flat-square)](https://packagist.org/packages/coffeecode/datalayer)
 
 ###### The data layer is a persistent abstraction component of your database that PDO has prepared instructions for performing common routines such as registering, reading, editing, and removing data.
 
-O data layer é um componente para abstração de persistência no seu banco de dados que usa PDO com prepared statements para executar rotinas comuns como cadastrar, ler, editar e remover dados.
+O data layer é um componente para abstração de persistência no seu banco de dados que usa PDO com prepared statements
+para executar rotinas comuns como cadastrar, ler, editar e remover dados.
 
 ## About CoffeeCode
 
 ###### CoffeeCode is a set of small and optimized PHP components for common tasks. Held by Robson V. Leite and the UpInside team. With them you perform routine tasks with fewer lines, writing less and doing much more.
 
-CoffeeCode é um conjunto de pequenos e otimizados componentes PHP para tarefas comuns. Mantido por Robson V. Leite e a equipe UpInside. Com eles você executa tarefas rotineiras com poucas linhas, escrevendo menos e fazendo muito mais.
+CoffeeCode é um conjunto de pequenos e otimizados componentes PHP para tarefas comuns. Mantido por Robson V. Leite e a
+equipe UpInside. Com eles você executa tarefas rotineiras com poucas linhas, escrevendo menos e fazendo muito mais.
 
 ### Highlights
 
@@ -32,7 +33,7 @@ CoffeeCode é um conjunto de pequenos e otimizados componentes PHP para tarefas 
 Data Layer is available via Composer:
 
 ```bash
-"coffeecode/datalayer": "1.1.*"
+"coffeecode/datalayer": "2.0.*"
 ```
 
 or run
@@ -51,10 +52,11 @@ Para mais detalhes sobre como usar o Data Layer, veja a pasta de exemplo com det
 
 ###### To begin using the Data Layer, you need to connect to the database (MariaDB / MySql). For more connections [PDO connections manual on PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
 
-Para começar a usar o Data Layer precisamos de uma conexão com o seu banco de dados. Para ver as conexões possíveis acesse o [manual de conexões do PDO em PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
+Para começar a usar o Data Layer precisamos de uma conexão com o seu banco de dados. Para ver as conexões possíveis
+acesse o [manual de conexões do PDO em PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
 
 ```php
-define("DATA_LAYER_CONFIG", [
+const DATA_LAYER_CONFIG = [
     "driver" => "mysql",
     "host" => "localhost",
     "port" => "3306",
@@ -67,16 +69,19 @@ define("DATA_LAYER_CONFIG", [
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
         PDO::ATTR_CASE => PDO::CASE_NATURAL
     ]
-]);
+];
 ```
 
 #### your model
 
 ###### The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer.
 
-O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para consumir é necessário criar o modelo de sua tabela e herdar o Data Layer.
+O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para
+consumir é necessário criar o modelo de sua tabela e herdar o Data Layer.
 
 ```php
+<?php
+
 class User extends DataLayer
 {
     /**
@@ -94,7 +99,9 @@ class User extends DataLayer
 
 ```php
 <?php
+
 use Example\Models\User;
+
 $model = new User();
 
 //find all users
@@ -127,6 +134,7 @@ echo $user->first_name . " " . $user->first_last;
 
 ```php
 <?php
+
 use Example\Models\User;
 
 $model = new User();
@@ -135,20 +143,28 @@ echo $user->first_name;
 ```
 
 #### secure params
+
 ###### See example find_example.php and model classes
+
 Consulte exemplo find_example.php e classes modelo
 
 ```php
+<?php
+
 $params = http_build_query(["name" => "UpInside & Associated"]);
 $company = (new Company())->find("name = :name", $params);
 var_dump($company, $company->fetch());
 ```
 
 #### join method
+
 ###### See example find_example.php and model classes
+
 Consulte exemplo find_example.php e classes modelo
 
 ```php
+<?php
+
 $addresses = new Address();
 $address = $addresses->findById(22);
 //get user data to this->user->[all data]
@@ -160,9 +176,10 @@ var_dump($address);
 
 ```php
 <?php
-use Example\Models\User;
-$model = new User();
 
+use Example\Models\User;
+
+$model = new User();
 $count = $model->find()->count();
 ```
 
@@ -170,9 +187,10 @@ $count = $model->find()->count();
 
 ```php
 <?php
-use Example\Models\User;
-$user = new User();
 
+use Example\Models\User;
+
+$user = new User();
 $user->first_name = "Robson";
 $user->last_name = "Leite";
 $userId = $user->save();
@@ -182,9 +200,10 @@ $userId = $user->save();
 
 ```php
 <?php
-use Example\Models\User;
-$user = (new User())->findById(2);
 
+use Example\Models\User;
+
+$user = (new User())->findById(2);
 $user->first_name = "Robson";
 $userId = $user->save();
 ```
@@ -193,9 +212,10 @@ $userId = $user->save();
 
 ```php
 <?php
-use Example\Models\User;
-$user = (new User())->findById(2);
 
+use Example\Models\User;
+
+$user = (new User())->findById(2);
 $user->destroy();
 ```
 
@@ -203,9 +223,10 @@ $user->destroy();
 
 ```php
 <?php
-use Example\Models\User;
-$user = (new User())->findById(2);
 
+use Example\Models\User;
+
+$user = (new User())->findById(2);
 if($user->fail()){
     echo $user->fail()->getMessage();
 }
@@ -214,8 +235,9 @@ if($user->fail()){
 #### custom data method
 
 ````php
+<?php
+
 class User{
-    //...
 
     public function fullName(): string 
     {
@@ -240,7 +262,8 @@ Please see [CONTRIBUTING](https://github.com/robsonvleite/datalayer/blob/master/
 
 ###### Security: If you discover any security related issues, please email cursos@upinside.com.br instead of using the issue tracker.
 
-Se você descobrir algum problema relacionado à segurança, envie um e-mail para cursos@upinside.com.br em vez de usar o rastreador de problemas.
+Se você descobrir algum problema relacionado à segurança, envie um e-mail para cursos@upinside.com.br em vez de usar o
+rastreador de problemas.
 
 Thank you
 
@@ -252,4 +275,5 @@ Thank you
 
 ## License
 
-The MIT License (MIT). Please see [License File](https://github.com/robsonvleite/datalayer/blob/master/LICENSE) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/robsonvleite/datalayer/blob/master/LICENSE) for more
+information.
