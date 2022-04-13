@@ -11,8 +11,8 @@ use PDOException;
  */
 class Connect
 {
-    /** @var PDO */
-    private static PDO $instance;
+    /** @var array */
+    private static array $instance;
 
     /** @var PDOException|null */
     private static ?PDOException $error = null;
@@ -23,21 +23,23 @@ class Connect
      */
     public static function getInstance(array $database = null): ?PDO
     {
-        if (empty(self::$instance) || $database != DATA_LAYER_CONFIG) {
-            $db = $database ?? DATA_LAYER_CONFIG;
+        $dbConf = $database ?? DATA_LAYER_CONFIG;
+        $dbName = $dbConf["dbname"];
+
+        if (empty(self::$instance[$dbName])) {
             try {
-                self::$instance = new PDO(
-                    $db["driver"] . ":host=" . $db["host"] . ";dbname=" . $db["dbname"] . ";port=" . $db["port"],
-                    $db["username"],
-                    $db["passwd"],
-                    $db["options"]
+                self::$instance[$dbName] = new PDO(
+                    $dbConf["driver"] . ":host=" . $dbConf["host"] . ";dbname=" . $dbConf["dbname"] . ";port=" . $dbConf["port"],
+                    $dbConf["username"],
+                    $dbConf["passwd"],
+                    $dbConf["options"]
                 );
             } catch (PDOException $exception) {
                 self::$error = $exception;
             }
         }
 
-        return self::$instance;
+        return self::$instance[$dbName];
     }
 
 
