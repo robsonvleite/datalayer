@@ -21,7 +21,7 @@ class Connect
      * @param array|null $database
      * @return PDO|null
      */
-    public static function getInstance(?array $database = null): ?PDO
+    public static function getInstance(array $database = null): ?PDO
     {
         if (empty(self::$instance) || $database != DATA_LAYER_CONFIG) {
             $db = $database ?? DATA_LAYER_CONFIG;

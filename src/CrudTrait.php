@@ -27,7 +27,9 @@ trait CrudTrait
             $columns = implode(", ", array_keys($data));
             $values = ":" . implode(", :", array_keys($data));
 
-            $stmt = Connect::getInstance($this->database)->prepare("INSERT INTO {$this->entity} ({$columns}) VALUES ({$values})");
+            $stmt = Connect::getInstance($this->database)->prepare(
+                "INSERT INTO {$this->entity} ({$columns}) VALUES ({$values})"
+            );
             $stmt->execute($this->filter($data));
 
             return Connect::getInstance($this->database)->lastInsertId();
@@ -58,7 +60,9 @@ trait CrudTrait
             $dateSet = implode(", ", $dateSet);
             parse_str($params, $params);
 
-            $stmt = Connect::getInstance($this->database)->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");
+            $stmt = Connect::getInstance($this->database)->prepare(
+                "UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}"
+            );
             $stmt->execute($this->filter(array_merge($data, $params)));
             return $stmt->rowCount();
         } catch (PDOException $exception) {

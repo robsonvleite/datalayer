@@ -27,7 +27,7 @@ abstract class DataLayer
     private bool $timestamps;
 
     /** @var array|null */
-    private ?array $database = null;
+    private ?array $database;
 
     /** @var string|null */
     protected ?string $statement = null;
@@ -35,17 +35,17 @@ abstract class DataLayer
     /** @var array|null */
     protected ?array $params = null;
 
-    /** @var string */
+    /** @var string|null */
     protected ?string $group = null;
 
     /** @var string|null */
     protected ?string $order = null;
 
-    /** @var int */
+    /** @var string|null */
     protected ?string $limit = null;
 
-    /** @var int */
-    protected ?int $offset = null;
+    /** @var string|null */
+    protected ?string $offset = null;
 
     /** @var PDOException|null */
     protected ?PDOException $fail = null;
@@ -116,7 +116,7 @@ abstract class DataLayer
 
     /**
      * @param int $mode
-     * @return array
+     * @return array|null
      */
     public function columns($mode = PDO::FETCH_OBJ): ?array
     {
@@ -212,9 +212,9 @@ abstract class DataLayer
 
     /**
      * @param bool $all
-     * @return array|mixed|null
+     * @return static|array|null
      */
-    public function fetch(bool $all = false)
+    public function fetch(bool $all = false): array|static|null
     {
         try {
             $stmt = Connect::getInstance($this->database)->prepare(

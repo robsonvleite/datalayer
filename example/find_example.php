@@ -14,12 +14,14 @@ use Example\Models\User;
 /*
  * MODEL
  */
+$testId = 1;
+
 echo "<h1>User Model</h1>";
 $user = new User();
 var_dump($user);
 
 echo "<h1>Find By Id</h1>";
-$user = (new User())->findById(4);
+$user = (new User())->findById($testId);
 var_dump($user->data(), [$user->first_name, $user->full_name]);
 
 /**
@@ -54,7 +56,7 @@ var_dump($company->fetch()->data());
 echo "<h1>Join</h1>";
 
 $addresses = new Address();
-$address = $addresses->findById(1);
+$address = $addresses->findById($testId);
 $address->getUser();
 
 var_dump($address->data());
