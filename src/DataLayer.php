@@ -41,11 +41,11 @@ abstract class DataLayer
     /** @var string|null */
     protected ?string $order = null;
 
-    /** @var int */
+    /** @var string|null */
     protected ?string $limit = null;
 
-    /** @var int */
-    protected ?int $offset = null;
+    /** @var string|null */
+    protected ?string $offset = null;
 
     /** @var PDOException|null */
     protected ?PDOException $fail = null;
