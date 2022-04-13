@@ -24,8 +24,8 @@ class Connect
     public static function getInstance(array $database = null): ?PDO
     {
         $dbConf = $database ?? DATA_LAYER_CONFIG;
-        $dbName = $dbConf["dbname"];
-
+        $dbName = "{$dbConf["driver"]}-{$dbConf["dbname"]}@{$dbConf["host"]}";
+        
         if (empty(self::$instance[$dbName])) {
             try {
                 self::$instance[$dbName] = new PDO(
