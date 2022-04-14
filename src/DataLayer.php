@@ -35,16 +35,16 @@ abstract class DataLayer
     /** @var array|null */
     protected ?array $params = null;
 
-    /** @var string */
+    /** @var string|null */
     protected ?string $group = null;
 
     /** @var string|null */
     protected ?string $order = null;
 
-    /** @var int */
+    /** @var string|null */
     protected ?string $limit = null;
 
-    /** @var int */
+    /** @var int|null */
     protected ?int $offset = null;
 
     /** @var PDOException|null */
