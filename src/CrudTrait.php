@@ -57,7 +57,7 @@ trait CrudTrait
                 $dateSet[] = "{$bind} = :{$bind}";
             }
             $dateSet = implode(", ", $dateSet);
-            parse_str($params, $params);
+            parse_str((string)$params, $params);
 
             $stmt = Connect::getInstance($this->database);
             $prepare = $stmt->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");
@@ -81,7 +81,7 @@ trait CrudTrait
             $stmt = Connect::getInstance($this->database);
             $prepare = $stmt->prepare("DELETE FROM {$this->entity} WHERE {$terms}");
             if ($params) {
-                parse_str($params, $params);
+                parse_str((string)$params, $params);
                 $prepare->execute($params);
                 return true;
             }
