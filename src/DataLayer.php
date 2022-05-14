@@ -152,7 +152,7 @@ abstract class DataLayer
     {
         if ($terms) {
             $this->statement = "SELECT {$columns} FROM {$this->entity} WHERE {$terms}";
-            parse_str($params, $this->params);
+            parse_str((string)$params, $this->params);
             return $this;
         }
 
