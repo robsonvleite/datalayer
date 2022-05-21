@@ -171,6 +171,23 @@ abstract class DataLayer
     }
 
     /**
+     * @param string $table
+     * @param string $first
+     * @param string|null $operator
+     * @param string|null $second
+     * @param string $type
+     * @param string|null $where
+     * @return DataLayer
+     */
+    public function join($table, $first, $operator = null, $second = null, $type = 'inner', $where = null): DataLayer
+    {
+        $type = strtoupper($type);
+        $where = ($where ? ' AND ' . $where : null);
+        $this->statement .= " {$type} JOIN {$table} ON {$first} {$operator} {$second}{$where}";
+        return $this;
+    }
+
+    /**
      * @param string $column
      * @return DataLayer|null
      */
