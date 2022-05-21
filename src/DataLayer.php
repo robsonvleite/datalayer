@@ -53,6 +53,12 @@ abstract class DataLayer
     /** @var object|null */
     protected ?object $data = null;
 
+    /** @var array The binary attributeS that will be encrypted. */
+    protected array $encrypt = [];
+
+    /** @var string|null */
+    protected ?string $encryptSecretKey = DATA_LAYER_SECRET_KEY ?? null;
+
     /**
      * DataLayer constructor.
      * @param string $entity
@@ -150,6 +156,8 @@ abstract class DataLayer
      */
     public function find(?string $terms = null, ?string $params = null, string $columns = "*"): DataLayer
     {
+        $columns = $this->aesDecrypt($columns);
+
         if ($terms) {
             $this->statement = "SELECT {$columns} FROM {$this->entity} WHERE {$terms}";
             parse_str($params, $this->params);
@@ -336,5 +344,36 @@ abstract class DataLayer
         $camelCase = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
         $camelCase[0] = strtolower($camelCase[0]);
         return $camelCase;
+    }
+
+    /**
+     * @param string $columns
+     * @return string
+     */
+    private function aesDecrypt(string $columns): string
+    {
+        if (!$this->encryptSecretKey || !$this->encrypt) {
+            return $columns;
+        }
+
+        $decrypt = [];
+        if ($columns == "*") {
+            foreach ($this->encrypt as $encrypt) {
+                $decrypt[] = "AES_DECRYPT($encrypt, UNHEX(SHA2('$this->encryptSecretKey', 512))) AS $encrypt";
+            }
+
+            return "*, " . implode(", ", $decrypt);
+        }
+
+        foreach (explode(",", $columns) as $column) {
+            $column = trim($column);
+            if (in_array($column, $this->encrypt)) {
+                $decrypt[] = "AES_DECRYPT($column, UNHEX(SHA2('$this->encryptSecretKey', 512))) AS $column";
+            } else {
+                $decrypt[] = $column;
+            }
+        }
+
+        return implode(", ", $decrypt);
     }
 }

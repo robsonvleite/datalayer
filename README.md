@@ -254,6 +254,26 @@ echo $this->full_name; //Robson V. Leite
 echo $this->document; //Restrict
 ```` 
 
+#### AES Encryption
+
+```php
+<?php
+
+const DATA_LAYER_SECRET_KEY = "DefinaSuaChaveSecreta";
+
+class User extends \CoffeeCode\DataLayer\DataLayer
+{
+    /**
+     * The binary attributeS that will be encrypted.
+     * 
+     * @var array
+     */
+    protected array $encrypt = [
+        "document",
+    ];
+}
+```
+
 ## Contributing
 
 Please see [CONTRIBUTING](https://github.com/robsonvleite/datalayer/blob/master/CONTRIBUTING.md) for details.

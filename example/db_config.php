@@ -15,6 +15,8 @@ const DATA_LAYER_CONFIG = [
     ]
 ];
 
+const DATA_LAYER_SECRET_KEY = "c0ff33c0d3/d474l4y3r";
+
 //const DATA_LAYER_CONFIG = [
 //    "driver" => "pgsql",
 //    "host" => "localhost",

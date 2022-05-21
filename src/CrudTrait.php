@@ -27,6 +27,18 @@ trait CrudTrait
             $columns = implode(", ", array_keys($data));
             $values = ":" . implode(", :", array_keys($data));
 
+            if ($this->encryptSecretKey && $this->encrypt) {
+                $values = [];
+                foreach (array_keys($data) as $value) {
+                    if (in_array($value, $this->encrypt)) {
+                        $values[] = "AES_ENCRYPT(:$value, UNHEX(SHA2('$this->encryptSecretKey', 512)))";
+                    } else {
+                        $values[] = ":$value";
+                    }
+                }
+                $values = implode(", ", $values);
+            }
+
             $stmt = Connect::getInstance($this->database);
             $prepare = $stmt->prepare("INSERT INTO {$this->entity} ({$columns}) VALUES ({$values})");
             $prepare->execute($this->filter($data));
@@ -52,15 +64,19 @@ trait CrudTrait
         }
 
         try {
-            $dateSet = [];
+            $dataSet = [];
             foreach ($data as $bind => $value) {
-                $dateSet[] = "{$bind} = :{$bind}";
+                if (in_array($bind, $this->encrypt)) {
+                    $dataSet[] = "{$bind} = AES_ENCRYPT(:$bind, UNHEX(SHA2('$this->encryptSecretKey', 512)))";
+                } else {
+                    $dataSet[] = "{$bind} = :{$bind}";
+                }
             }
-            $dateSet = implode(", ", $dateSet);
+            $dataSet = implode(", ", $dataSet);
             parse_str($params, $params);
 
             $stmt = Connect::getInstance($this->database);
-            $prepare = $stmt->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");
+            $prepare = $stmt->prepare("UPDATE {$this->entity} SET {$dataSet} WHERE {$terms}");
             $prepare->execute($this->filter(array_merge($data, $params)));
 
             return $prepare->rowCount();
