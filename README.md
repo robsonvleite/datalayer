@@ -116,6 +116,12 @@ $users = $model->find()->limit(2)->offset(2)->fetch(true);
 //find all users limit 2 offset 2 order by field ASC
 $users = $model->find()->limit(2)->offset(2)->order("first_name ASC")->fetch(true);
 
+//find all users and your city
+$users = $model
+    ->find(null, null, 'users.*, addresses.city')
+    ->join('addresses', 'addresses.user_id', '=', 'users.id')
+    ->fetch(true);
+
 //looping users
 foreach ($users as $user) {
     echo $user->first_name;
