@@ -75,6 +75,20 @@ abstract class DataLayer
     }
 
     /**
+     * @param $method
+     * @param $arguments
+     * @return DataLayer|null
+     */
+    public function __call($method, $arguments): ?DataLayer
+    {
+        $snakeCase = fn(string $word) => strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $word));
+
+        if (str_starts_with($method, 'findBy')) {
+            return $this->findBy([$snakeCase(substr($method, 6)) => implode(', ', $arguments)]);
+        }
+    }
+
+    /**
      * @param $name
      * @param $value
      */
@@ -161,13 +175,18 @@ abstract class DataLayer
     }
 
     /**
-     * @param int $id
-     * @param string $columns
+     * @param array $criteria
+     * @param string|null $columns
      * @return DataLayer|null
      */
-    public function findById(int $id, string $columns = "*"): ?DataLayer
+    public function findBy(array $criteria, ?string $columns = '*'): ?DataLayer
     {
-        return $this->find("{$this->primary} = :id", "id={$id}", $columns)->fetch();
+        $terms = null;
+        foreach ($criteria as $key => $value) {
+            $terms[] = $key . ' = :' . $key;
+        }
+
+        return $this->find(implode(' AND ', $terms), http_build_query($criteria), $columns);
     }
 
     /**
@@ -277,7 +296,7 @@ abstract class DataLayer
                 return false;
             }
 
-            $this->data = $this->findById($id)->data();
+            $this->data = $this->findById($id)->fetch()->data();
             return true;
         } catch (PDOException $exception) {
             $this->fail = $exception;

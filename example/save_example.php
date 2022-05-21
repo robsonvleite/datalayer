@@ -39,7 +39,7 @@ if ($update) {
     echo "<h1>Update:</h1>";
 
     $name = ["Marcos", "Marcelo", "Ricardo", "João"];
-    $user = (new User())->findById(4);
+    $user = (new User())->findById(4)->fetch();
 
     if ($user) {
         $user->first_name = $name[rand(0, 3)];
@@ -64,7 +64,7 @@ $addr = false;
 if ($addr) {
     echo "<h1>Addr Model Example</h1>";
 
-    $user = (new User())->findById(5);
+    $user = (new User())->findById(5)->fetch();
 
     $addr = new Address;
     $addr->user_id = $user->id;

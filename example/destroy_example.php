@@ -14,7 +14,7 @@ use Example\Models\User;
  */
 echo "<h1>Remove</h1>";
 
-$user = (new User())->findById(6);
+$user = (new User())->findById(6)->fetch();
 
 if ($user) {
     var_dump($user->data());

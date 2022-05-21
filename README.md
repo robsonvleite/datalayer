@@ -123,14 +123,18 @@ foreach ($users as $user) {
 
 //find one user by condition
 $user = $model->find("first_name = :name", "name=Robson")->fetch();
+// or
+$user = $model->findBy(["first_name" => "Robson"])->fetch();
 echo $user->first_name;
 
 //find one user by two conditions
 $user = $model->find("first_name = :name AND last_name = :last", "name=Robson&last=Leite")->fetch();
+// or
+$user = $model->findBy(["first_name" => "Robson", "last_name" => "Leite"])->fetch();
 echo $user->first_name . " " . $user->first_last;
 ```
 
-#### findById
+#### findBySomeColumn
 
 ```php
 <?php
@@ -138,7 +142,11 @@ echo $user->first_name . " " . $user->first_last;
 use Example\Models\User;
 
 $model = new User();
-$user = $model->findById(2);
+$user = $model->findById(2)->fetch(); // id
+echo $user->first_name;
+$user = $model->findByEmail("cursos@upinside.com.br")->fetch(); // email
+echo $user->first_name;
+$user = $model->findByFirstName("Robson")->fetch(); // first_name
 echo $user->first_name;
 ```
 
@@ -166,7 +174,7 @@ Consulte exemplo find_example.php e classes modelo
 <?php
 
 $addresses = new Address();
-$address = $addresses->findById(22);
+$address = $addresses->findById(22)->fetch();
 //get user data to this->user->[all data]
 $address->user();
 var_dump($address);
@@ -203,7 +211,7 @@ $userId = $user->save();
 
 use Example\Models\User;
 
-$user = (new User())->findById(2);
+$user = (new User())->findById(2)->fetch();
 $user->first_name = "Robson";
 $userId = $user->save();
 ```
@@ -215,7 +223,7 @@ $userId = $user->save();
 
 use Example\Models\User;
 
-$user = (new User())->findById(2);
+$user = (new User())->findById(2)->fetch();
 $user->destroy();
 ```
 
@@ -226,7 +234,7 @@ $user->destroy();
 
 use Example\Models\User;
 
-$user = (new User())->findById(2);
+$user = (new User())->findById(2)->fetch();
 if($user->fail()){
     echo $user->fail()->getMessage();
 }

@@ -21,7 +21,7 @@ $user = new User();
 var_dump($user);
 
 echo "<h1>Find By Id</h1>";
-$user = (new User())->findById($testId);
+$user = (new User())->findById($testId)->fetch();
 var_dump($user->data(), [$user->first_name, $user->full_name]);
 
 /**
@@ -56,7 +56,7 @@ var_dump($company->fetch()->data());
 echo "<h1>Join</h1>";
 
 $addresses = new Address();
-$address = $addresses->findById($testId);
+$address = $addresses->findById($testId)->fetch();
 $address->getUser();
 
 var_dump($address->data());

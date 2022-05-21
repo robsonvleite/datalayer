@@ -23,7 +23,7 @@ class Address extends DataLayer
      */
     public function getUser(): Address
     {
-        $this->user = (new User())->findById($this->user_id)->data();
+        $this->user = (new User())->findById($this->user_id)->fetch()->data();
         return $this;
     }
 }

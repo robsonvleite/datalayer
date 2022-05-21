@@ -28,7 +28,7 @@ const DATABASE = [
  * MODEL
  */
 echo "<h1>Normal User</h1>";
-$user = (new User())->findById(5);
+$user = (new User())->findById(5)->fetch();
 var_dump($user->data());
 
 echo "<h1>Another DB User</h1>";
@@ -42,9 +42,9 @@ $connect = Connect::getInstance(DATABASE);
 $users = $connect->query("SELECT * FROM ws_users LIMIT 1");
 var_dump($users->fetch(PDO::FETCH_OBJ));
 
-$user = (new UserDatabase())->findById(1);
+$user = (new UserDatabase())->findById(1)->fetch();
 var_dump($user->data());
 
 echo "<h1>Normal User Again</h1>";
-$user = (new User())->findById(5);
+$user = (new User())->findById(5)->fetch();
 var_dump($user->data());
