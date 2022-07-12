@@ -231,7 +231,7 @@ abstract class DataLayer
      */
     public function count(): int
     {
-        $stmt = Connect::getInstance()->prepare($this->statement);
+        $stmt = Connect::getInstance()->prepare($this->statement . $this->group);
         $stmt->execute($this->params);
         return $stmt->rowCount();
     }
