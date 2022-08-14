@@ -34,6 +34,7 @@ echo "<h1>Find</h1>";
 //$result = $user->find()->limit(2)->offset(2)->fetch(true);
 //$result = $user->find()->limit(4)->offset(2)->order("id DESC")->fetch(true);
 //$result = $user->find()->limit(2)->offset(2)->order("RAND()")->fetch(true);
+//$result = $user->find()->in("id", [1, 2, 3])->fetch(true);
 
 $result = $user->find()->limit(1)->fetch(true);
 $totalUsers = $user->find()->count();
