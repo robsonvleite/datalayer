@@ -59,6 +59,7 @@ abstract class DataLayer
      * @param array $required
      * @param string $primary
      * @param bool $timestamps
+     * @param array|null $database
      */
     public function __construct(
         string $entity,
@@ -118,7 +119,7 @@ abstract class DataLayer
      * @param int $mode
      * @return array|null
      */
-    public function columns($mode = PDO::FETCH_OBJ): ?array
+    public function columns(int $mode = PDO::FETCH_OBJ): ?array
     {
         $stmt = Connect::getInstance($this->database)->prepare("DESCRIBE {$this->entity}");
         $stmt->execute($this->params);
@@ -152,7 +153,9 @@ abstract class DataLayer
     {
         if ($terms) {
             $this->statement = "SELECT {$columns} FROM {$this->entity} WHERE {$terms}";
-            parse_str($params, $this->params);
+            if ($params) {
+                parse_str($params, $this->params);
+            }
             return $this;
         }
 
