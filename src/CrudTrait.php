@@ -20,7 +20,6 @@ trait CrudTrait
     {
         if ($this->timestamps) {
             $data["created_at"] = (new DateTime("now"))->format("Y-m-d H:i:s");
-            $data["updated_at"] = $data["created_at"];
         }
 
         try {
