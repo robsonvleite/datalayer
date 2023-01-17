@@ -16,7 +16,7 @@ trait CrudTrait
      * @return int|null
      * @throws PDOException
      */
-    protected function create(array $data): ?int
+    protected function create(array $data): string|bool
     {
         if ($this->timestamps) {
             $data["created_at"] = (new DateTime("now"))->format("Y-m-d H:i:s");
@@ -34,7 +34,7 @@ trait CrudTrait
             return $stmt->lastInsertId();
         } catch (PDOException $exception) {
             $this->fail = $exception;
-            return null;
+            return false;
         }
     }
 
@@ -57,7 +57,7 @@ trait CrudTrait
                 $dateSet[] = "{$bind} = :{$bind}";
             }
             $dateSet = implode(", ", $dateSet);
-            parse_str($params, $params);
+            parse_str($params ?? "", $params);
 
             $stmt = Connect::getInstance($this->database);
             $prepare = $stmt->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");

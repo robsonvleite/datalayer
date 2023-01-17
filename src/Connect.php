@@ -25,11 +25,17 @@ class Connect
     {
         $dbConf = $database ?? DATA_LAYER_CONFIG;
         $dbName = "{$dbConf["driver"]}-{$dbConf["dbname"]}@{$dbConf["host"]}";
-        
+        $dbDsn = $dbConf["driver"] . ":host=" . $dbConf["host"] . ";dbname=" . $dbConf["dbname"] . ";port=" . $dbConf["port"];
+
+        //DSN alternative for SQL Server (sqlsrv)
+        if ($dbConf['driver'] == 'sqlsrv') {
+            $dbDsn = $dbConf["driver"] . ":Server=" . $dbConf["host"] . "," . $dbConf["port"] . ";Database=" . $dbConf["dbname"];
+        }
+
         if (empty(self::$instance[$dbName])) {
             try {
                 self::$instance[$dbName] = new PDO(
-                    $dbConf["driver"] . ":host=" . $dbConf["host"] . ";dbname=" . $dbConf["dbname"] . ";port=" . $dbConf["port"],
+                    $dbDsn,
                     $dbConf["username"],
                     $dbConf["passwd"],
                     $dbConf["options"]
