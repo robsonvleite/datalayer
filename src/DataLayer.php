@@ -205,7 +205,7 @@ abstract class DataLayer
      * @param array $values
      * @return DataLayer
      */
-    public function in(string $column, array $values): ?DataLayer
+    public function in(string $column, array $values): DataLayer
     {
         $index = 0;
         $params = array();
