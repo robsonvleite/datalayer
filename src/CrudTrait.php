@@ -57,7 +57,7 @@ trait CrudTrait
                 $dateSet[] = "{$bind} = :{$bind}";
             }
             $dateSet = implode(", ", $dateSet);
-            parse_str($params, $params);
+            parse_str($params ?? "", $params);
 
             $stmt = Connect::getInstance($this->database);
             $prepare = $stmt->prepare("UPDATE {$this->entity} SET {$dateSet} WHERE {$terms}");
