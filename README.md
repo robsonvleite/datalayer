@@ -116,6 +116,9 @@ $users = $model->find()->limit(2)->offset(2)->fetch(true);
 //find all users limit 2 offset 2 order by field ASC
 $users = $model->find()->limit(2)->offset(2)->order("first_name ASC")->fetch(true);
 
+// find all users with in operator
+$users = $model->find()->in("id", [1, 2, 3])->fetch(true);
+
 //looping users
 foreach ($users as $user) {
     echo $user->first_name;
@@ -127,6 +130,10 @@ echo $user->first_name;
 
 //find one user by two conditions
 $user = $model->find("first_name = :name AND last_name = :last", "name=Robson&last=Leite")->fetch();
+echo $user->first_name . " " . $user->first_last;
+
+//find one user by condition and with in operator
+$user = $model->find("first_name = :name", "name=Robson")->in("last_name",["Menezes", "Sampaio"])->fetch();
 echo $user->first_name . " " . $user->first_last;
 ```
 

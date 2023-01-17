@@ -47,6 +47,18 @@ if ($result) {
     echo "<h2>Not Users</h2>";
 }
 
+echo "<h1>Find IN</h1>";
+$result = $user->find()->in("id", [1, 2, 3])->fetch(true);
+
+if ($result) {
+    foreach ($result as $user) {
+        var_dump($user->data());
+    }
+} else {
+    echo "<h2>Not Users</h2>";
+}
+
+
 echo "<h1>Secure Params</h1>";
 $params = http_build_query(["name" => "UpInside"]);
 $company = (new Company())->find("name = :name", $params);

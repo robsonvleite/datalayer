@@ -201,6 +201,39 @@ abstract class DataLayer
     }
 
     /**
+     * @param string $column
+     * @param array $values
+     * @return DataLayer
+     */
+    public function in(string $column, array $values): ?DataLayer
+    {
+        $index = 0;
+        $params = array();
+        $statement = "{$column} IN (";
+
+        foreach ($values as $value) {
+            $index++;
+            if ($value == end($values)) {
+                $statement .= ":in_{$index}";
+            } else {
+                $statement .= ":in_{$index},";
+            }
+
+            $params["in_{$index}"] = $value;
+        }
+
+        $statement .= ")";
+        if (!str_contains($this->statement, "WHERE")) {
+            $this->statement .= " WHERE " . $statement;
+        } else {
+            $this->statement .= " AND " . $statement;
+        }
+
+        $this->params = $this->params ? $this->params += $params : $params;
+        return $this;
+    }
+
+    /**
      * @param int $offset
      * @return DataLayer|null
      */
