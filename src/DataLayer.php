@@ -273,7 +273,7 @@ abstract class DataLayer
                 $save = $id;
             }
 
-            if ($save === null) {
+            if ($save === false) {
                 return false;
             }
 
