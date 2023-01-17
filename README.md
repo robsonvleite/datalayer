@@ -133,8 +133,11 @@ $user = $model->find("first_name = :name AND last_name = :last", "name=Robson&la
 echo $user->first_name . " " . $user->first_last;
 
 //find one user by condition and with in operator
-$user = $model->find("first_name = :name", "name=Robson")->in("last_name",["Menezes", "Sampaio"])->fetch();
-echo $user->first_name . " " . $user->first_last;
+$user = $model->find("first_name = :name", "name=Robson")->in("last_name",["Menezes", "Sampaio"])->fetch(true);
+
+foreach ($users as $user) {
+    echo $user->first_name . " " . $user->first_last;
+}
 ```
 
 #### findById
