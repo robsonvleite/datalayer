@@ -11,8 +11,6 @@ use PDOException;
  */
 class Connect
 {
-    const DRIVE_SQLSERVER = 'sqlsrv';
-
     /** @var array */
     private static array $instance;
 
@@ -25,26 +23,23 @@ class Connect
      */
     public static function getInstance(array $database = null): ?PDO
     {
-        $dbConf = ($database ?? DATA_LAYER_CONFIG);
+        $dbConf = $database ?? DATA_LAYER_CONFIG;
         $dbName = "{$dbConf["driver"]}-{$dbConf["dbname"]}@{$dbConf["host"]}";
+        $dbDsn = $dbConf["driver"] . ":host=" . $dbConf["host"] . ";dbname=" . $dbConf["dbname"] . ";port=" . $dbConf["port"];
+
+        //DSN alternative for SQL Server (sqlsrv)
+        if ($dbConf['driver'] == 'sqlsrv') {
+            $dbDsn = $dbConf["driver"] . ":Server=" . $dbConf["host"] . "," . $dbConf["port"] . ";Database=" . $dbConf["dbname"];
+        }
 
         if (empty(self::$instance[$dbName])) {
             try {
-                if ($dbConf["driver"] === self::DRIVE_SQLSERVER) {
-                    self::$instance[$dbName] = new PDO(
-                        $dbConf["driver"] . ":Server=" . $dbConf["host"] . "," . $dbConf["port"] . ";Database=" . $dbConf["dbname"],
-                        $dbConf["username"],
-                        $dbConf["passwd"],
-                        $dbConf["options"]
-                    );
-                } else {
-                    self::$instance[$dbName] = new PDO(
-                        $dbConf["driver"] . ":host=" . $dbConf["host"] . ";dbname=" . $dbConf["dbname"] . ";port=" . $dbConf["port"],
-                        $dbConf["username"],
-                        $dbConf["passwd"],
-                        $dbConf["options"]
-                    );
-                }
+                self::$instance[$dbName] = new PDO(
+                    $dbDsn,
+                    $dbConf["username"],
+                    $dbConf["passwd"],
+                    $dbConf["options"]
+                );
             } catch (PDOException $exception) {
                 self::$error = $exception;
             }
