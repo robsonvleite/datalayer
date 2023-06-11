@@ -47,6 +47,27 @@ abstract class DataLayer
     /** @var string|null */
     protected ?string $offset = null;
 
+    /** @var string|null */
+    protected $select = null;
+
+    /** @var string|null */
+    protected $join = null;
+
+    /** @var string|null */
+    protected $on = null;
+
+    /** @var string|null */
+    protected $where = null;
+
+    /** @var string|null */
+    protected $orWhere = null;
+
+    /** @var string|null */
+    protected $columns = '*';
+
+    /** @var string|null */
+    protected $andWhere = null;
+
     /** @var PDOException|null */
     protected ?PDOException $fail = null;
 
@@ -118,7 +139,7 @@ abstract class DataLayer
      * @param int $mode
      * @return array|null
      */
-    public function columns(int $mode = PDO::FETCH_OBJ): ?array
+    public function columnsSchema(int $mode = PDO::FETCH_OBJ): ?array
     {
         $stmt = Connect::getInstance($this->database)->prepare("DESCRIBE {$this->entity}");
         $stmt->execute($this->params);
@@ -202,6 +223,37 @@ abstract class DataLayer
 
     /**
      * @param string $column
+     * @param string $operador
+     * @param string $value
+     * @return DataLayer|null
+     */
+    public function where(string $column, string $operator, string $value): ?DataLayer
+    {
+        $this->where = " WHERE {$column} {$operator} '{$value}'";
+        return $this;
+    }
+
+    /**
+     * @return DataLayer|null
+     */
+    public function select(): ?DataLayer
+    {
+        $this->select = "SELECT {$this->columns} FROM {$this->entity}";
+        return $this;
+    }
+
+    /**
+     * @param string $columns
+     * @return DataLayer|null
+     */
+    public function columns(string $columns): ?DataLayer
+    {
+        $this->columns = $columns;
+        return $this;
+    }
+
+    /**
+     * @param string $column
      * @param array $values
      * @return DataLayer
      */
@@ -265,6 +317,34 @@ abstract class DataLayer
 
             return $stmt->fetchObject(static::class);
         } catch (PDOException $exception) {
+            $this->fail = $exception;
+            return null;
+        }
+    }
+
+    /**
+     * @return array|static|null
+     */
+    public function get(bool $all = false): array|static|null
+    {
+        try{
+            $this->query = $this->select.$this->join.$this->on.$this->where.$this->orWhere.$this->andWhere.$this->order.$this->limit.$this->offset;
+
+            $stmt = Connect::getInstance($this->database)->prepare($this->query);
+            $stmt->execute($this->params);
+
+            if(!$stmt->rowCount()){
+                return null;
+            }
+
+            if(!$all){
+                return $stmt->fetchObject(static::class);
+            }
+            
+            return $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
+            
+        }catch(PDOException $exception)
+        {
             $this->fail = $exception;
             return null;
         }
