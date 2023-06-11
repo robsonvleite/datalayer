@@ -54,6 +54,9 @@ abstract class DataLayer
     protected $join = null;
 
     /** @var string|null */
+    protected $joins = null;
+
+    /** @var string|null */
     protected $on = null;
 
     /** @var string|null */
@@ -139,7 +142,7 @@ abstract class DataLayer
      * @param int $mode
      * @return array|null
      */
-    public function columnsSchema(int $mode = PDO::FETCH_OBJ): ?array
+    public function columns(int $mode = PDO::FETCH_OBJ): ?array
     {
         $stmt = Connect::getInstance($this->database)->prepare("DESCRIBE {$this->entity}");
         $stmt->execute($this->params);
@@ -234,6 +237,41 @@ abstract class DataLayer
     }
 
     /**
+     * @param string $columns
+     * @param string $operator
+     * @param string $value
+     */
+    public function orWhere(string $column, string $operator,  $value)
+    {
+        $this->orWhere .= " OR {$column} {$operator} '{$value}'"; 
+        return $this;
+    }
+
+    /** 
+     * @param string $table
+     * @return DataLayer|null
+     */
+    public function join(string $table): ?DataLayer
+    {
+       $this->join = " INNER JOIN {$table}";
+       return $this;
+    }
+
+    /**
+     * @param string $onColumnTable
+     * @param string $operator
+     * @param string $onColumnTabelSecondary
+     * @return object $this
+     */
+    public function on(string $onColumnTable, string $operator, string $onColumnTabelSecondary)
+    {
+        $this->on = " ON {$onColumnTable} {$operator} {$onColumnTabelSecondary}";
+        $this->joins .= $this->join.$this->on;
+
+        return $this;
+    }
+
+    /**
      * @return DataLayer|null
      */
     public function select(): ?DataLayer
@@ -246,7 +284,7 @@ abstract class DataLayer
      * @param string $columns
      * @return DataLayer|null
      */
-    public function columns(string $columns): ?DataLayer
+    public function column(string $columns): ?DataLayer
     {
         $this->columns = $columns;
         return $this;
@@ -327,8 +365,9 @@ abstract class DataLayer
      */
     public function get(bool $all = false): array|static|null
     {
+    
         try{
-            $this->query = $this->select.$this->join.$this->on.$this->where.$this->orWhere.$this->andWhere.$this->order.$this->limit.$this->offset;
+            $this->query = "SELECT {$this->columns} FROM {$this->entity}".$this->joins.$this->where.$this->orWhere.$this->andWhere.$this->order.$this->limit.$this->offset;
 
             $stmt = Connect::getInstance($this->database)->prepare($this->query);
             $stmt->execute($this->params);
