@@ -247,6 +247,18 @@ abstract class DataLayer
         return $this;
     }
 
+    /**
+     * @param string $columns
+     * @param string $operator
+     * @param string $value
+     */
+    public function andWhere(string $column, string $operator,  $value)
+    {
+        $this->orWhere .= " AND {$column} {$operator} '{$value}'"; 
+        return $this;
+    }
+
+
     /** 
      * @param string $table
      * @return DataLayer|null

@@ -15,23 +15,48 @@ use Example\Models\User;
 
 echo "<h1>Where:</h1>";
 $user = new User();
-$result = $user->where("users.id", '=', '1')
-                ->orWhere("email", "=", "willian28@email.com.br")
-                ->orWhere("email", "=", "eleno29@email.com.br")
-                ->join("address")
-                ->on("users.id", "=", "address.user_id")
-                ->limit(1)
-                ->column("users.email, users.first_name, address.street, address.number, posts.title")
-                ->join("posts")
-                ->on("users.id", "=", "posts.author")
+$result = $user 
+                ->column("users.email, users.first_name")
+                ->where("users.id", '=', '1')
+                ->limit(5)
                 ->get(true);
-
 
 var_dump($user->query);
 
-foreach($result as $user){
-    var_dump($user->data());
+if(!empty($result)){
+    foreach($result as $user){
+        var_dump($user->data());
+    }
 }
+
+echo "<h1>orWhere:</h1>";
+$result = $user->where("users.id", '=', '1')
+                ->orWhere("email", "=", "willian28@email.com.br")
+                ->orWhere("email", "=", "eleno29@email.com.br")
+                ->column("users.email, users.first_name")
+                ->get(true);
+
+if(!empty($result)){
+    foreach($result as $user){
+        var_dump($user->data());
+    }
+}
+
+
+echo "<h1>andWhere:</h1>";
+$result = $user->where("users.id", '=', '1')
+                ->andWhere("email", "=", "robsonvleite@email.com.br")
+                ->column("users.email, users.first_name")
+                ->get(true);
+
+if(!empty($result)){
+    foreach($result as $user){
+        var_dump($user->data());
+    }
+}
+
+
+
 
 
 
