@@ -48,9 +48,6 @@ abstract class DataLayer
     protected ?string $offset = null;
 
     /** @var string|null */
-    protected $select = null;
-
-    /** @var string|null */
     protected $join = null;
 
     /** @var string|null */
