@@ -47,6 +47,27 @@ abstract class DataLayer
     /** @var string|null */
     protected ?string $offset = null;
 
+    /** @var string|null */
+    protected $join = null;
+
+    /** @var string|null */
+    protected $joins = null;
+
+    /** @var string|null */
+    protected $on = null;
+
+    /** @var string|null */
+    protected $where = null;
+
+    /** @var string|null */
+    protected $orWhere = null;
+
+    /** @var string|null */
+    protected $columns = '*';
+
+    /** @var string|null */
+    protected $andWhere = null;
+
     /** @var PDOException|null */
     protected ?PDOException $fail = null;
 
@@ -202,6 +223,75 @@ abstract class DataLayer
 
     /**
      * @param string $column
+     * @param string $operador
+     * @param string $value
+     * @return DataLayer|null
+     */
+    public function where(string $column, string $operator, string $value): ?DataLayer
+    {
+        $this->where = " WHERE {$column} {$operator} '{$value}'";
+        return $this;
+    }
+
+    /**
+     * @param string $columns
+     * @param string $operator
+     * @param string $value
+     */
+    public function orWhere(string $column, string $operator,  $value)
+    {
+        $this->orWhere .= " OR {$column} {$operator} '{$value}'"; 
+        return $this;
+    }
+
+    /**
+     * @param string $columns
+     * @param string $operator
+     * @param string $value
+     */
+    public function andWhere(string $column, string $operator,  $value)
+    {
+        $this->orWhere .= " AND {$column} {$operator} '{$value}'"; 
+        return $this;
+    }
+
+
+    /** 
+     * @param string $table
+     * @return DataLayer|null
+     */
+    public function join(string $table): ?DataLayer
+    {
+       $this->join = " INNER JOIN {$table}";
+       return $this;
+    }
+
+    /**
+     * @param string $onColumnTable
+     * @param string $operator
+     * @param string $onColumnTabelSecondary
+     * @return object $this
+     */
+    public function on(string $onColumnTable, string $operator, string $onColumnTabelSecondary)
+    {
+        $this->on = " ON {$onColumnTable} {$operator} {$onColumnTabelSecondary}";
+        $this->joins .= $this->join.$this->on;
+
+        return $this;
+    }
+
+    /**
+     * @param string $columns
+     * @return DataLayer|null
+     */
+    public function column(string $columns): ?DataLayer
+    {
+        $this->columns = $columns;
+        return $this;
+    }
+
+    /**
+     * @param string $column
      * @param array $values
      * @return DataLayer
      */
@@ -265,6 +355,35 @@ abstract class DataLayer
 
             return $stmt->fetchObject(static::class);
         } catch (PDOException $exception) {
+            $this->fail = $exception;
+            return null;
+        }
+    }
+
+    /**
+     * @return array|static|null
+     */
+    public function get(bool $all = false): array|static|null
+    {
+    
+        try{
+            $this->query = "SELECT {$this->columns} FROM {$this->entity}".$this->joins.$this->where.$this->orWhere.$this->andWhere.$this->order.$this->limit.$this->offset;
+
+            $stmt = Connect::getInstance($this->database)->prepare($this->query);
+            $stmt->execute($this->params);
+
+            if(!$stmt->rowCount()){
+                return null;
+            }
+
+            if(!$all){
+                return $stmt->fetchObject(static::class);
+            }
+            
+            return $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
+            
+        }catch(PDOException $exception)
+        {
             $this->fail = $exception;
             return null;
         }
