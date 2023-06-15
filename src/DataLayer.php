@@ -284,15 +284,6 @@ abstract class DataLayer
     }
 
     /**
-     * @return DataLayer|null
-     */
-    public function select(): ?DataLayer
-    {
-        $this->select = "SELECT {$this->columns} FROM {$this->entity}";
-        return $this;
-    }
-
-    /**
      * @param string $columns
      * @return DataLayer|null
      */
