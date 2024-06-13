@@ -32,6 +32,12 @@ class Connect
             $dbDsn = $dbConf["driver"] . ":Server=" . $dbConf["host"] . "," . $dbConf["port"] . ";Database=" . $dbConf["dbname"];
         }
 
+        //DSN alternative for FireBird ^2.5 (firebird)
+        if ($dbConf['driver'] == 'firebird') {
+            $charset = (!empty($dbConf["charset"]) && !empty($dbConf["dialect"]) ? ";charset={$dbConf["charset"]};dialect={$dbConf["dialect"]}" : "");
+            $dbDsn = $dbConf["driver"] . ":dbname=" . $dbConf["host"] . "/" . $dbConf["port"] . ":" . $dbConf["dbname"] . $charset;
+        }
+
         if (empty(self::$instance[$dbName])) {
             try {
                 self::$instance[$dbName] = new PDO(
