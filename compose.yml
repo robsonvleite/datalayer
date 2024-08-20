@@ -1,0 +1,24 @@
+services:
+  php-apache:
+    container_name: datalayer
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    restart: always
+    volumes:
+      - .:/var/www/html
+    links:
+      - mariadb
+
+  mariadb:
+    container_name: datalayer-db-test
+    image: mariadb:lts
+    ports:
+      - 33060:3306
+    environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=1
+      - MARIADB_DATABASE=datalayer
+      - MARIADB_USER=datalayer
+      - MARIADB_PASSWORD=datalayer

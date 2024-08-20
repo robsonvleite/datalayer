@@ -8,14 +8,14 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/robsonvleite/datalayer.svg?style=flat-square)](https://scrutinizer-ci.com/g/robsonvleite/datalayer)
 [![Total Downloads](https://img.shields.io/packagist/dt/coffeecode/datalayer.svg?style=flat-square)](https://packagist.org/packages/coffeecode/datalayer)
 
-###### The data layer is a persistent abstraction component of your database that PDO has prepared instructions for performing common routines such as registering, reading, editing, and removing data.
+**The data layer is a persistent abstraction component of your database that PDO has prepared instructions for performing common routines such as registering, reading, editing, and removing data.**
 
 O data layer é um componente para abstração de persistência no seu banco de dados que usa PDO com prepared statements
 para executar rotinas comuns como cadastrar, ler, editar e remover dados.
 
 ## About CoffeeCode
 
-###### CoffeeCode is a set of small and optimized PHP components for common tasks. Held by Robson V. Leite and the UpInside team. With them you perform routine tasks with fewer lines, writing less and doing much more.
+**CoffeeCode is a set of small and optimized PHP components for common tasks. Held by Robson V. Leite and the UpInside team. With them you perform routine tasks with fewer lines, writing less and doing much more.**
 
 CoffeeCode é um conjunto de pequenos e otimizados componentes PHP para tarefas comuns. Mantido por Robson V. Leite e a
 equipe UpInside. Com eles você executa tarefas rotineiras com poucas linhas, escrevendo menos e fazendo muito mais.
@@ -44,13 +44,13 @@ composer require coffeecode/datalayer
 
 ## Documentation
 
-###### For details on how to use the Data Layer, see the sample folder with details in the component directory
+**For details on how to use the Data Layer, see the sample folder with details in the component directory.**
 
 Para mais detalhes sobre como usar o Data Layer, veja a pasta de exemplo com detalhes no diretório do componente
 
-#### connection
+### connection
 
-###### To begin using the Data Layer, you need to connect to the database (MariaDB / MySql). For more connections [PDO connections manual on PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
+**To begin using the Data Layer, you need to connect to the database (MariaDB / MySql). For more connections [PDO connections manual on PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php).**
 
 Para começar a usar o Data Layer precisamos de uma conexão com o seu banco de dados. Para ver as conexões possíveis
 acesse o [manual de conexões do PDO em PHP.net](https://www.php.net/manual/pt_BR/pdo.drivers.php)
@@ -72,9 +72,9 @@ const DATA_LAYER_CONFIG = [
 ];
 ```
 
-#### your model
+### your model
 
-###### The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer.
+**The Data Layer is based on an MVC structure with the Layer Super Type and Active Record design patterns. Soon to consume it is necessary to create the model of your table and inherit the Data Layer.**
 
 O Data Layer é baseado em uma estrutura MVC com os padrões de projeto Layer Super Type e Active Record. Logo para
 consumir é necessário criar o modelo de sua tabela e herdar o Data Layer.
@@ -95,7 +95,7 @@ class User extends DataLayer
 }
 ```
 
-#### find
+### find
 
 ```php
 <?php
@@ -140,7 +140,7 @@ foreach ($users as $user) {
 }
 ```
 
-#### findById
+### findById
 
 ```php
 <?php
@@ -152,9 +152,9 @@ $user = $model->findById(2);
 echo $user->first_name;
 ```
 
-#### secure params
+### secure params
 
-###### See example find_example.php and model classes
+**See example find_example.php and model classes.**
 
 Consulte exemplo find_example.php e classes modelo
 
@@ -166,9 +166,9 @@ $company = (new Company())->find("name = :name", $params);
 var_dump($company, $company->fetch());
 ```
 
-#### join method
+### join method
 
-###### See example find_example.php and model classes
+**See example find_example.php and model classes.**
 
 Consulte exemplo find_example.php e classes modelo
 
@@ -182,7 +182,7 @@ $address->user();
 var_dump($address);
 ```
 
-#### count
+### count
 
 ```php
 <?php
@@ -193,7 +193,7 @@ $model = new User();
 $count = $model->find()->count();
 ```
 
-#### save create
+### save create
 
 ```php
 <?php
@@ -206,7 +206,7 @@ $user->last_name = "Leite";
 $userId = $user->save();
 ```
 
-#### save update
+### save update
 
 ```php
 <?php
@@ -218,7 +218,7 @@ $user->first_name = "Robson";
 $userId = $user->save();
 ```
 
-#### destroy
+### destroy
 
 ```php
 <?php
@@ -229,7 +229,7 @@ $user = (new User())->findById(2);
 $user->destroy();
 ```
 
-#### fail
+### fail
 
 ```php
 <?php
@@ -242,7 +242,7 @@ if($user->fail()){
 }
 ```
 
-#### custom data method
+### custom data method
 
 ````php
 <?php
@@ -262,7 +262,29 @@ class User{
 
 echo $this->full_name; //Robson V. Leite
 echo $this->document; //Restrict
-```` 
+````
+
+## Testes Unitários
+
+Para executar o conjunto de testes, você precisará clonar o repositório e instalar as dependências. É necessário ter instalado o `XDEBUG` para executar os relatórios de cobertura.
+
+````bash
+git clone https://github.com/robsonvleite/datalayer.git
+cd datalayer
+composer install
+composer test
+# Or
+# composer coverage
+````
+
+Uma melhor alternativa para executar os testes sem precisar "mexer" no seu ambiente é utilizando o `Docker + Docker Compose`. Na raiz do projeto existe os arquivos de configuração para isso, basta executar o comando:
+
+````bash
+docker compose up -d --build
+docker exec -it datalayer composer coverage
+````
+
+O container disponibilizará um endereço para acessar a página com o relatório da cobertura do código: [http://localhost:8080/coverage/index.html](http://localhost:8080/coverage/index.html)
 
 ## Contributing
 
@@ -270,9 +292,9 @@ Please see [CONTRIBUTING](https://github.com/robsonvleite/datalayer/blob/master/
 
 ## Support
 
-###### Security: If you discover any security related issues, please email cursos@upinside.com.br instead of using the issue tracker.
+**Security: If you discover any security related issues, please email <cursos@upinside.com.br> instead of using the issue tracker.**
 
-Se você descobrir algum problema relacionado à segurança, envie um e-mail para cursos@upinside.com.br em vez de usar o
+Se você descobrir algum problema relacionado à segurança, envie um e-mail para <cursos@upinside.com.br> em vez de usar o
 rastreador de problemas.
 
 Thank you

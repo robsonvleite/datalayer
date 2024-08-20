@@ -1,0 +1,16 @@
+paths:
+    migrations: '%%PHINX_CONFIG_DIR%%/db_migrations'
+
+environments:
+    default_migration_table: phinxlog
+    default_environment: development
+    development:
+        adapter: mysql
+        host: mariadb
+        name: datalayer
+        user: datalayer
+        pass: datalayer
+        port: 3306
+        charset: utf8
+
+version_order: creation
