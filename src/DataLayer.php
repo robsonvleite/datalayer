@@ -207,31 +207,28 @@ abstract class DataLayer
      */
     public function in(string $column, array $values): DataLayer
     {
-        $index = 0;
-        $params = array();
-        $statement = "{$column} IN (";
-
-        foreach ($values as $value) {
-            $index++;
-            if ($value == end($values)) {
-                $statement .= ":in_{$index}";
-            } else {
-                $statement .= ":in_{$index},";
-            }
-
-            $params["in_{$index}"] = $value;
+        $params = [];
+        $placeholders = [];
+    
+        foreach (array_values($values) as $index => $value) {
+            $placeholder = ":in_{$column}_{$index}";
+            $placeholders[] = $placeholder;
+            $params["in_{$column}_{$index}"] = $value;
         }
-
-        $statement .= ")";
-        if (!str_contains($this->statement, "WHERE")) {
+    
+        $statement = "{$column} IN (" . implode(", ", $placeholders) . ")";
+    
+        if (!$this->str_contains($this->statement, "WHERE")) {
             $this->statement .= " WHERE " . $statement;
         } else {
             $this->statement .= " AND " . $statement;
         }
-
-        $this->params = $this->params ? $this->params += $params : $params;
+    
+        $this->params = array_merge($this->params ?? [], $params);
+    
         return $this;
     }
+
 
     /**
      * @param int $offset
