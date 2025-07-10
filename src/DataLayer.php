@@ -32,6 +32,9 @@ abstract class DataLayer
     /** @var string|null */
     protected ?string $statement = null;
 
+    /** @var string|null */
+    protected ?string $join = null;
+
     /** @var array|null */
     protected ?array $params = null;
 
@@ -151,12 +154,12 @@ abstract class DataLayer
     public function find(?string $terms = null, ?string $params = null, string $columns = "*"): DataLayer
     {
         if ($terms) {
-            $this->statement = "SELECT {$columns} FROM {$this->entity} WHERE {$terms}";
+            $this->statement = "SELECT {$columns} FROM {$this->entity} {$this->join} WHERE {$terms}";
             parse_str($params ?? "", $this->params);
             return $this;
         }
 
-        $this->statement = "SELECT {$columns} FROM {$this->entity}";
+        $this->statement = "SELECT {$columns} FROM {$this->entity} {$this->join}";
         return $this;
     }
 
@@ -170,6 +173,18 @@ abstract class DataLayer
         return $this->find("{$this->primary} = :id", "id={$id}", $columns)->fetch();
     }
 
+    /**
+     * @param string $table
+     * @param string $on
+     * @param string $type
+     * @return DataLayer|null
+     */
+    public function join(string $table, string $on, string $type = "INNER"): ?DataLayer
+    {
+        $this->join .= " {$type} JOIN {$table} ON {$on}";
+        return $this;
+    }
+    
     /**
      * @param string $column
      * @return DataLayer|null
