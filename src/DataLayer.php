@@ -341,7 +341,7 @@ abstract class DataLayer
         $data = (array)$this->data();
         foreach ($this->required as $field) {
             if (empty($data[$field])) {
-                if (!is_int($data[$field])) {
+                if (!is_numeric($data[$field])) {
                     return false;
                 }
             }
