@@ -250,9 +250,14 @@ abstract class DataLayer
     public function fetch(bool $all = false): array|static|null
     {
         try {
-            $stmt = Connect::getInstance($this->database)->prepare(
+            $stmt = Connect::getInstance($this->database)?->prepare(
                 $this->statement . $this->group . $this->order . $this->limit . $this->offset
             );
+
+            if(!$stmt){
+                return null;
+            }
+            
             $stmt->execute($this->params);
 
             if (!$stmt->rowCount()) {

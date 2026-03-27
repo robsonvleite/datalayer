@@ -12,7 +12,7 @@ use PDOException;
 class Connect
 {
     /** @var array */
-    private static array $instance;
+    private static array $instance = [];
 
     /** @var PDOException|null */
     private static ?PDOException $error = null;
